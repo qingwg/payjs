@@ -5,8 +5,9 @@
 
 
 使用Golang开发的PayJS SDK，简单、易用。
-PayJS微信支付个人接口解决方案，感兴趣的可以去官网看下，下面是我的ref链接，你点击进入并且登录的话，我们两都有10豆豆奖励。
-[PayJS](https://payjs.cn/ref/DWPXBZ)
+
+[PayJS](https://payjs.cn/ref/DWPXBZ)是微信支付个人接口解决方案，感兴趣的可以去官网看下，这是是我的ref链接，你点击进入并且登录的话，我们两都有10豆豆奖励。
+
 
 ## 快速开始
 
