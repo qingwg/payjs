@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/yuyan2077/payjs/context"
 	"github.com/yuyan2077/payjs/util"
-	"net/url"
 )
 
 //Server struct
@@ -13,6 +12,8 @@ type Server struct {
 	*context.Context
 
 	debug bool
+
+	openID string
 
 	messageHandler func(message Message)
 
@@ -67,6 +68,10 @@ func (srv *Server) handleRequest() (err error) {
 	if err != nil {
 		return
 	}
+
+	//set openID
+	srv.openID = srv.Query("openid")
+
 	srv.messageHandler(message)
 	return
 }
@@ -79,14 +84,7 @@ func (srv *Server) getMessage() (message Message, err error) {
 
 	//验证消息签名
 	msgSignature := srv.Query("sign")
-	var p = url.Values{}
-	jsonbs, _ := json.Marshal(message)
-	jsonmap := make(map[string]interface{})
-	json.Unmarshal(jsonbs, &jsonmap)
-	for k, v := range jsonmap {
-		p.Add(k, fmt.Sprintf("%v", v))
-	}
-	msgSignatureGen := util.Signature(p, srv.Context.Key)
+	msgSignatureGen := util.Signature(message, srv.Context.Key)
 	if msgSignature != msgSignatureGen {
 		return message, fmt.Errorf("消息不合法，验证签名失败")
 	}

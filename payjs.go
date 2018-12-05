@@ -4,6 +4,7 @@ import (
 	"github.com/yuyan2077/payjs/context"
 	"github.com/yuyan2077/payjs/docs/wechat-develop/server"
 	"github.com/yuyan2077/payjs/miniapp"
+	"github.com/yuyan2077/payjs/native"
 	"net/http"
 )
 
@@ -38,7 +39,12 @@ func (payjs *PayJS) GetServer(req *http.Request, writer http.ResponseWriter) *se
 	return server.NewServer(payjs.Context)
 }
 
-// GetMiniAppPay 微信小程序支付配置
+// GetMiniApp 微信小程序支付
 func (payjs *PayJS) GetMiniApp() *miniapp.MiniApp {
 	return miniapp.NewMiniApp(payjs.Context)
+}
+
+// GetNative 扫码支付，主扫
+func (payjs *PayJS) GetNative() *native.Native {
+	return native.NewNative(payjs.Context)
 }
