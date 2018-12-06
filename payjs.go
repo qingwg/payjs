@@ -1,10 +1,17 @@
 package payjs
 
 import (
+	"github.com/yuyan2077/payjs/cashier"
 	"github.com/yuyan2077/payjs/context"
-	"github.com/yuyan2077/payjs/docs/wechat-develop/server"
+	"github.com/yuyan2077/payjs/facepay"
+	"github.com/yuyan2077/payjs/js"
+	"github.com/yuyan2077/payjs/mch"
+	"github.com/yuyan2077/payjs/micropay"
 	"github.com/yuyan2077/payjs/miniapp"
 	"github.com/yuyan2077/payjs/native"
+	"github.com/yuyan2077/payjs/order"
+	"github.com/yuyan2077/payjs/server"
+	"github.com/yuyan2077/payjs/user"
 	"net/http"
 )
 
@@ -32,11 +39,26 @@ func copyConfigToContext(cfg *Config, context *context.Context) {
 	context.NotifyURL = cfg.NotifyURL
 }
 
-// GetServer 异步通知消息管理
-func (payjs *PayJS) GetServer(req *http.Request, writer http.ResponseWriter) *server.Server {
+// GetNative 扫码支付，主扫
+func (payjs *PayJS) GetNative() *native.Native {
+	return native.NewNative(payjs.Context)
+}
+
+// GetMicropay 扫码支付，主扫
+func (payjs *PayJS) GetMicropay() *micropay.Micropay {
+	return micropay.NewMicropay(payjs.Context)
+}
+
+// GetCashier 收银台支付 收银台方式同样是通过 JSAPI 方式发起的支付，只是简化了开发步骤和流程。适用于微信webview环境
+func (payjs *PayJS) GetCashier() *cashier.Cashier {
+	return cashier.NewCashier(payjs.Context)
+}
+
+// GetJs JSAPI 接口
+func (payjs *PayJS) GetJs(req *http.Request, writer http.ResponseWriter) *js.Js {
 	payjs.Context.Request = req
 	payjs.Context.Writer = writer
-	return server.NewServer(payjs.Context)
+	return js.NewJs(payjs.Context)
 }
 
 // GetMiniApp 微信小程序支付
@@ -44,7 +66,29 @@ func (payjs *PayJS) GetMiniApp() *miniapp.MiniApp {
 	return miniapp.NewMiniApp(payjs.Context)
 }
 
-// GetNative 扫码支付，主扫
-func (payjs *PayJS) GetNative() *native.Native {
-	return native.NewNative(payjs.Context)
+// GetFacepay 人脸支付
+func (payjs *PayJS) GetFacepay() *facepay.Facepay {
+	return facepay.NewFacepay(payjs.Context)
+}
+
+// GetOrder 订单 订单查询、订单关闭、订单退款
+func (payjs *PayJS) GetOrder() *order.Order {
+	return order.NewOrder(payjs.Context)
+}
+
+// GetServer 异步通知消息管理
+func (payjs *PayJS) GetServer(req *http.Request, writer http.ResponseWriter) *server.Server {
+	payjs.Context.Request = req
+	payjs.Context.Writer = writer
+	return server.NewServer(payjs.Context)
+}
+
+// GetUser 用户 用户详情
+func (payjs *PayJS) GetUser() *user.User {
+	return user.NewUser(payjs.Context)
+}
+
+// GetMch 商户 商户详情
+func (payjs *PayJS) GetMch() *mch.Mch {
+	return mch.NewMch(payjs.Context)
 }
