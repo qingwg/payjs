@@ -1,70 +1,46 @@
-package native
+package order
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/yuyan2077/payjs/context"
 	"github.com/yuyan2077/payjs/util"
 )
 
-const getPayQrcodeURL = "https://payjs.cn/api/native"
+const getCloseURL = "https://payjs.cn/api/close"
 
-// Native struct
-type Native struct {
-	*context.Context
-}
-
-// PayQrcodeRequest 请求参数
-type PayQrcodeRequest struct {
-	MchID      string `json:"mchid"`        //Y	商户号
-	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
-	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
-	Body       string `json:"body"`         //N	订单标题
-	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
-	NotifyUrl  string `json:"notify_url"`   //N	接收微信支付异步通知的回调地址。必须为可直接访问的URL，不能带参数、session验证、csrf验证。留空则不通知
-	Sign       string `json:"sign"`         //Y	数据签名 详见签名算法
-}
-
-// PayQrcodeResponse PayJS返回参数
-type PayQrcodeResponse struct {
-	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
-	Status       int    `json:"status"`         //N	return_code为0时有status参数为0
-	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
-	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
+// CloseRequest 请求参数
+type CloseRequest struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
-	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-	TotalFee     string `json:"total_fee"`      //Y	金额。单位：分
-	Qrcode       string `json:"qrcode"`         //Y	二维码图片地址
-	CodeUrl      string `json:"code_url"`       //Y	可将该参数生成二维码展示出来进行扫码支付
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
 
-//NewNative init
-func NewNative(context *context.Context) *Native {
-	native := new(Native)
-	native.Context = context
-	return native
+// CloseResponse PayJS返回参数
+type CloseResponse struct {
+	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功 0:请求失败
+	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
+	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
+	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
 
-// GetPayQrcode 请求PayJS获取支付二维码
-func (native *Native) GetPayQrcode(payQrcodeRequest *PayQrcodeRequest) (payQrcodeResponse PayQrcodeResponse, err error) {
-	sign := util.Signature(payQrcodeRequest, native.Context.Key)
-	payQrcodeRequest.Sign = sign
-	response, err := util.PostJSON(getPayQrcodeURL, payQrcodeRequest)
+// Close 关闭已经发起的订单
+func (order *Order) Close(closeRequest *CloseRequest) (closeResponse CloseResponse, err error) {
+	sign := util.Signature(closeRequest, order.Context.Key)
+	closeRequest.Sign = sign
+	response, err := util.PostJSON(getCloseURL, closeRequest)
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(response, &payQrcodeResponse)
+	err = json.Unmarshal(response, &closeResponse)
 	if err != nil {
 		return
 	}
-	if payQrcodeResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", payQrcodeResponse.Status, payQrcodeResponse.Msg)
+	if closeResponse.ReturnCode == 0 {
+		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", closeResponse.ReturnCode, closeResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
-	msgSignature := payQrcodeResponse.Sign
-	msgSignatureGen := util.Signature(payQrcodeResponse, native.Context.Key)
+	msgSignature := closeResponse.Sign
+	msgSignatureGen := util.Signature(closeResponse, order.Context.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
