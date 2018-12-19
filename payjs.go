@@ -24,7 +24,7 @@ type PayJS struct {
 type Config struct {
 	Key       string
 	MchID     string
-	NotifyURL string
+	NotifyUrl string
 }
 
 func New(cfg *Config) *PayJS {
@@ -36,7 +36,7 @@ func New(cfg *Config) *PayJS {
 func copyConfigToContext(cfg *Config, context *context.Context) {
 	context.MchID = cfg.MchID
 	context.Key = cfg.Key
-	context.NotifyURL = cfg.NotifyURL
+	context.NotifyUrl = cfg.NotifyUrl
 }
 
 // GetNative 扫码支付，主扫
