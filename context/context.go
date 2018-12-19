@@ -8,7 +8,7 @@ import (
 type Context struct {
 	Key       string
 	MchID     string
-	NotifyURL string
+	NotifyUrl string
 
 	Writer  http.ResponseWriter
 	Request *http.Request

@@ -47,13 +47,23 @@ func NewNative(context *context.Context) *Native {
 }
 
 // GetPayQrcode 请求PayJS获取支付二维码
-func (native *Native) GetPayQrcode(payQrcodeRequest *PayQrcodeRequest) (payQrcodeResponse PayQrcodeResponse, err error) {
+func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (outTradeNoResp, totalFeeResp, qrcodeResp, codeUrlResp, payJSOrderIDResp string, err error) {
+	payQrcodeRequest := PayQrcodeRequest{
+		MchID:      native.MchID,
+		TotalFee:   totalFeeReq,
+		OutTradeNo: outTradeNoReq,
+		Body:       bodyReq,
+		Attach:     attachReq,
+		NotifyUrl:  native.NotifyUrl,
+	}
 	sign := util.Signature(payQrcodeRequest, native.Context.Key)
 	payQrcodeRequest.Sign = sign
 	response, err := util.PostJSON(getPayQrcodeURL, payQrcodeRequest)
 	if err != nil {
 		return
 	}
+
+	payQrcodeResponse := PayQrcodeResponse{}
 	err = json.Unmarshal(response, &payQrcodeResponse)
 	if err != nil {
 		return
@@ -69,5 +79,11 @@ func (native *Native) GetPayQrcode(payQrcodeRequest *PayQrcodeRequest) (payQrcod
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
 	}
+
+	outTradeNoResp = payQrcodeResponse.OutTradeNo
+	totalFeeResp = payQrcodeResponse.TotalFee
+	qrcodeResp = payQrcodeResponse.Qrcode
+	codeUrlResp = payQrcodeResponse.CodeUrl
+	payJSOrderIDResp = payQrcodeResponse.PayJSOrderID
 	return
 }
