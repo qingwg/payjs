@@ -33,7 +33,7 @@ type PayQrcodeResponse struct {
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
 	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-	TotalFee     string `json:"total_fee"`      //Y	金额。单位：分
+	TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
 	Qrcode       string `json:"qrcode"`         //Y	二维码图片地址
 	CodeUrl      string `json:"code_url"`       //Y	可将该参数生成二维码展示出来进行扫码支付
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
@@ -47,7 +47,7 @@ func NewNative(context *context.Context) *Native {
 }
 
 // GetPayQrcode 请求PayJS获取支付二维码
-func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (outTradeNoResp, totalFeeResp, qrcodeResp, codeUrlResp, payJSOrderIDResp string, err error) {
+func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (outTradeNoResp string, totalFeeResp int, qrcodeResp, codeUrlResp, payJSOrderIDResp string, err error) {
 	payQrcodeRequest := PayQrcodeRequest{
 		MchID:      native.MchID,
 		TotalFee:   totalFeeReq,
@@ -56,7 +56,7 @@ func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, atta
 		Attach:     attachReq,
 		NotifyUrl:  native.NotifyUrl,
 	}
-	sign := util.Signature(payQrcodeRequest, native.Context.Key)
+	sign := util.Signature(payQrcodeRequest, native.Key)
 	payQrcodeRequest.Sign = sign
 	response, err := util.PostJSON(getPayQrcodeURL, payQrcodeRequest)
 	if err != nil {
@@ -68,13 +68,13 @@ func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, atta
 	if err != nil {
 		return
 	}
-	if payQrcodeResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", payQrcodeResponse.Status, payQrcodeResponse.Msg)
+	if payQrcodeResponse.ReturnCode != 1 {
+		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s, errmsg=%s", payQrcodeResponse.ReturnCode, payQrcodeResponse.Msg, payQrcodeResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
 	msgSignature := payQrcodeResponse.Sign
-	msgSignatureGen := util.Signature(payQrcodeResponse, native.Context.Key)
+	msgSignatureGen := util.Signature(payQrcodeResponse, native.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return

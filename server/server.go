@@ -89,6 +89,10 @@ func (srv *Server) getMessage() (message Message, err error) {
 		return message, fmt.Errorf("消息不合法，验证签名失败")
 	}
 
+	if message.ReturnCode != 1 {
+		return message, fmt.Errorf("支付失败")
+	}
+
 	return message, err
 }
 
