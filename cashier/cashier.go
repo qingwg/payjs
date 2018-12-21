@@ -46,7 +46,21 @@ func NewCashier(context *context.Context) *Cashier {
 	return cashier
 }
 
-func (cashier *Cashier) GetRequestUrl(cashierRequest CashierRequest) string {
+func (cashier *Cashier) GetRequestUrl(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, callbackUrlReq string, auto, hide bool) (src string, err error) {
+	cashierRequest := CashierRequest{
+		MchID:       cashier.MchID,
+		TotalFee:    totalFeeReq,
+		OutTradeNo:  outTradeNoReq,
+		Body:        bodyReq,
+		Attach:      attachReq,
+		NotifyUrl:   cashier.NotifyUrl,
+		CallbackUrl: callbackUrlReq,
+		Auto:        auto,
+		Hide:        hide,
+	}
+	sign := util.Signature(cashierRequest, cashier.Key)
+	cashierRequest.Sign = sign
+
 	var params = url.Values{}
 	jsonbs, _ := json.Marshal(cashierRequest)
 	jsonmap := make(map[string]interface{})
@@ -55,7 +69,6 @@ func (cashier *Cashier) GetRequestUrl(cashierRequest CashierRequest) string {
 		params.Add(k, fmt.Sprintf("%v", v))
 	}
 
-	params.Del(`sign`)
 	var keys = make([]string, 0, 0)
 	for key := range params {
 		if params.Get(key) != `` {
@@ -71,9 +84,8 @@ func (cashier *Cashier) GetRequestUrl(cashierRequest CashierRequest) string {
 			pList = append(pList, key+"="+value)
 		}
 	}
-	var src = strings.Join(pList, "&")
-	src += "&key=" + cashier.Context.Key
-	sign := util.MD5Sum(src)
-	src += "&sign=" + sign
-	return src
+
+	src = getCashierURL + "?"
+	src += strings.Join(pList, "&")
+	return
 }

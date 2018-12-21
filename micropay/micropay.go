@@ -28,12 +28,11 @@ type MicropayRequest struct {
 // MicropayResponse PayJS返回参数
 type MicropayResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
-	Status       int    `json:"status"`         //N	return_code为0时有status参数为0
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
 	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-	TotalFee     string `json:"total_fee"`      //Y	金额。单位：分
+	TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
 
@@ -45,19 +44,28 @@ func NewMicropay(context *context.Context) *Micropay {
 }
 
 // GetMicropay 拿到扫码信息请求PayJS
-func (micropay *Micropay) GetMicropay(micropayRequest *MicropayRequest) (micropayResponse MicropayResponse, err error) {
+func (micropay *Micropay) GetMicropay(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (outTradeNoResp string, totalFeeResp int, payJSOrderIDResp string, err error) {
+	micropayRequest := MicropayRequest{
+		MchID:      micropay.MchID,
+		TotalFee:   totalFeeReq,
+		OutTradeNo: outTradeNoReq,
+		Body:       bodyReq,
+		Attach:     attachReq,
+		AuthCode:   autoCodeReq,
+	}
 	sign := util.Signature(micropayRequest, micropay.Context.Key)
 	micropayRequest.Sign = sign
 	response, err := util.PostJSON(getMicropayURL, micropayRequest)
 	if err != nil {
 		return
 	}
+	micropayResponse := MicropayResponse{}
 	err = json.Unmarshal(response, &micropayResponse)
 	if err != nil {
 		return
 	}
 	if micropayResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetMicropay Error , errcode=%d , errmsg=%s", micropayResponse.Status, micropayResponse.Msg)
+		err = fmt.Errorf("GetMicropay Error , errcode=%d , errmsg=%s", micropayResponse.ReturnCode, micropayResponse.Msg)
 		return
 	}
 	// 检测sign

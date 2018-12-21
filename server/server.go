@@ -1,10 +1,10 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/yuyan2077/payjs/context"
 	"github.com/yuyan2077/payjs/util"
+	"strconv"
 )
 
 //Server struct
@@ -78,12 +78,23 @@ func (srv *Server) handleRequest() (err error) {
 
 //getMessage 解析PayJS支付成功推送的消息
 func (srv *Server) getMessage() (message Message, err error) {
-	if err = json.NewDecoder(srv.Request.Body).Decode(&message); err != nil {
-		return message, fmt.Errorf("从body中解析json失败,err=%v", err)
-	}
+	message.ReturnCode, _ = strconv.Atoi(srv.Request.PostFormValue("return_code"))
+	message.TotalFee, _ = strconv.Atoi(srv.Request.PostFormValue("total_fee"))
+	message.OutTradeNo = srv.Request.PostFormValue("out_trade_no")
+	message.PayJSOrderID = srv.Request.PostFormValue("payjs_order_id")
+	message.TransactionID = srv.Request.PostFormValue("transaction_id")
+	message.TimeEnd = srv.Request.PostFormValue("time_end")
+	message.Openid = srv.Request.PostFormValue("openid")
+	message.Attach = srv.Request.PostFormValue("attach")
+	message.MchID = srv.Request.PostFormValue("mchid")
+	message.Sign = srv.Request.PostFormValue("sign")
+
+	//if err = json.NewDecoder(srv.Request.Body).Decode(&message); err != nil {
+	//	return message, fmt.Errorf("从body中解析json失败,err=%v", err)
+	//}
 
 	//验证消息签名
-	msgSignature := srv.Query("sign")
+	msgSignature := message.Sign
 	msgSignatureGen := util.Signature(message, srv.Context.Key)
 	if msgSignature != msgSignatureGen {
 		return message, fmt.Errorf("消息不合法，验证签名失败")
