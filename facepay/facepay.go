@@ -29,7 +29,6 @@ type FacepayRequest struct {
 // FacepayResponse PayJS返回参数
 type FacepayResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
-	Status       int    `json:"status"`         //N	return_code为0时有status参数为0
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -58,7 +57,7 @@ func (facepay *Facepay) GetFacepay(facepayRequest *FacepayRequest) (facepayRespo
 		return
 	}
 	if facepayResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", facepayResponse.Status, facepayResponse.Msg)
+		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", facepayResponse.ReturnCode, facepayResponse.Msg)
 		return
 	}
 	// 检测sign

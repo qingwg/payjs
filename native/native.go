@@ -28,7 +28,6 @@ type PayQrcodeRequest struct {
 // PayQrcodeResponse PayJS返回参数
 type PayQrcodeResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
-	Status       int    `json:"status"`         //N	return_code为0时有status参数为0
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -69,7 +68,7 @@ func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, atta
 		return
 	}
 	if payQrcodeResponse.ReturnCode != 1 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s, errmsg=%s", payQrcodeResponse.ReturnCode, payQrcodeResponse.Msg, payQrcodeResponse.ReturnMsg)
+		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s", payQrcodeResponse.ReturnCode, payQrcodeResponse.Msg)
 		return
 	}
 	// 检测sign
