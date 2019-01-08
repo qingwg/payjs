@@ -25,7 +25,7 @@ type UserInfoRequest struct {
 type UserInfoResponse struct {
 	ReturnCode int    `json:"return_code"` //Y	1:请求成功 0:请求失败
 	ReturnMsg  string `json:"return_msg"`  //Y	返回消息
-	User       string `json:"user"`        //N	用户资料
+	User       UserInfo `json:"user"`        //N	用户资料
 	Sign       string `json:"sign"`        //Y	数据签名 详见签名算法
 }
 
@@ -60,6 +60,32 @@ func NewUser(context *context.Context) *User {
 //提示：openid必须是有在 PAYJS 支付过的
 //特别说明：此请求同时返回了用户在微信公众号中的 unionid ，进一步阅读详情
 func (user *User) GetUserInfo(userInfoRequest *UserInfoRequest) (userInfoResponse UserInfoResponse, err error) {
+	sign := util.Signature(userInfoRequest, user.Context.Key)
+	userInfoRequest.Sign = sign
+	response, err := util.PostJSON(getUserInfoURL, userInfoRequest)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(response, &userInfoResponse)
+	if err != nil {
+		return
+	}
+	if userInfoResponse.ReturnCode == 0 {
+		err = fmt.Errorf("GetUserInfo Error , errcode=%d , errmsg=%s", userInfoResponse.ReturnCode, userInfoResponse.ReturnMsg)
+		return
+	}
+	// 检测sign
+	msgSignature := userInfoResponse.Sign
+	msgSignatureGen := util.Signature(userInfoResponse, user.Context.Key)
+	if msgSignature != msgSignatureGen {
+		err = fmt.Errorf("消息不合法，验证签名失败")
+		return
+	}
+	return
+}
+
+// GetOpenid 获取用户 OPENID
+func (user *User) GetOpenid(userInfoRequest *UserInfoRequest) (userInfoResponse UserInfoResponse, err error) {
 	sign := util.Signature(userInfoRequest, user.Context.Key)
 	userInfoRequest.Sign = sign
 	response, err := util.PostJSON(getUserInfoURL, userInfoRequest)

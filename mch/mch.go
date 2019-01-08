@@ -41,8 +41,11 @@ func NewMch(context *context.Context) *Mch {
 }
 
 // GetMchInfo 请求PayJS获取支付二维码
-func (mch *Mch) GetMchInfo(mchInfoRequest *MchInfoRequest) (mchInfoResponse MchInfoResponse, err error) {
-	sign := util.Signature(mchInfoRequest, mch.Context.Key)
+func (mch *Mch) GetMchInfo() (mchInfoResponse MchInfoResponse, err error) {
+	mchInfoRequest := MchInfoRequest{
+		MchID:      mch.MchID,
+	}
+	sign := util.Signature(mchInfoRequest, mch.Key)
 	mchInfoRequest.Sign = sign
 	response, err := util.PostJSON(getMchInfoURL, mchInfoRequest)
 	if err != nil {
@@ -52,13 +55,13 @@ func (mch *Mch) GetMchInfo(mchInfoRequest *MchInfoRequest) (mchInfoResponse MchI
 	if err != nil {
 		return
 	}
-	if mchInfoResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", mchInfoResponse.ReturnCode, mchInfoResponse.ReturnMsg)
+	if mchInfoResponse.ReturnCode != 1 {
+		err = fmt.Errorf("GetMchInfo Error , errcode=%d , errmsg=%s", mchInfoResponse.ReturnCode, mchInfoResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
 	msgSignature := mchInfoResponse.Sign
-	msgSignatureGen := util.Signature(mchInfoResponse, mch.Context.Key)
+	msgSignatureGen := util.Signature(mchInfoResponse, mch.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return

@@ -7,15 +7,15 @@ import (
 	"github.com/yuyan2077/payjs/util"
 )
 
-const getPayQrcodeURL = "https://payjs.cn/api/native"
+const getCreateURL = "https://payjs.cn/api/native"
 
 // Native struct
 type Native struct {
 	*context.Context
 }
 
-// PayQrcodeRequest 请求参数
-type PayQrcodeRequest struct {
+// CreateRequest 请求参数
+type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
 	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
@@ -25,8 +25,8 @@ type PayQrcodeRequest struct {
 	Sign       string `json:"sign"`         //Y	数据签名 详见签名算法
 }
 
-// PayQrcodeResponse PayJS返回参数
-type PayQrcodeResponse struct {
+// CreateResponse PayJS返回参数
+type CreateResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
@@ -45,9 +45,9 @@ func NewNative(context *context.Context) *Native {
 	return native
 }
 
-// GetPayQrcode 请求PayJS获取支付二维码
-func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (outTradeNoResp string, totalFeeResp int, qrcodeResp, codeUrlResp, payJSOrderIDResp string, err error) {
-	payQrcodeRequest := PayQrcodeRequest{
+// Create 请求PayJS获取支付二维码
+func (native *Native) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (createResponse CreateResponse, err error) {
+	createRequest := CreateRequest{
 		MchID:      native.MchID,
 		TotalFee:   totalFeeReq,
 		OutTradeNo: outTradeNoReq,
@@ -55,34 +55,27 @@ func (native *Native) GetPayQrcode(totalFeeReq int, bodyReq, outTradeNoReq, atta
 		Attach:     attachReq,
 		NotifyUrl:  native.NotifyUrl,
 	}
-	sign := util.Signature(payQrcodeRequest, native.Key)
-	payQrcodeRequest.Sign = sign
-	response, err := util.PostJSON(getPayQrcodeURL, payQrcodeRequest)
+	sign := util.Signature(createRequest, native.Key)
+	createRequest.Sign = sign
+	response, err := util.PostJSON(getCreateURL, createRequest)
 	if err != nil {
 		return
 	}
 
-	payQrcodeResponse := PayQrcodeResponse{}
-	err = json.Unmarshal(response, &payQrcodeResponse)
+	err = json.Unmarshal(response, &createResponse)
 	if err != nil {
 		return
 	}
-	if payQrcodeResponse.ReturnCode != 1 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s", payQrcodeResponse.ReturnCode, payQrcodeResponse.Msg)
+	if createResponse.ReturnCode != 1 {
+		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s", createResponse.ReturnCode, createResponse.Msg)
 		return
 	}
 	// 检测sign
-	msgSignature := payQrcodeResponse.Sign
-	msgSignatureGen := util.Signature(payQrcodeResponse, native.Key)
+	msgSignature := createResponse.Sign
+	msgSignatureGen := util.Signature(createResponse, native.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
 	}
-
-	outTradeNoResp = payQrcodeResponse.OutTradeNo
-	totalFeeResp = payQrcodeResponse.TotalFee
-	qrcodeResp = payQrcodeResponse.Qrcode
-	codeUrlResp = payQrcodeResponse.CodeUrl
-	payJSOrderIDResp = payQrcodeResponse.PayJSOrderID
 	return
 }
