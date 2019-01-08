@@ -71,7 +71,7 @@ func (user *User) GetUserInfo(userInfoRequest *UserInfoRequest) (userInfoRespons
 		return
 	}
 	if userInfoResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", userInfoResponse.ReturnCode, userInfoResponse.ReturnMsg)
+		err = fmt.Errorf("GetUserInfo Error , errcode=%d , errmsg=%s", userInfoResponse.ReturnCode, userInfoResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
