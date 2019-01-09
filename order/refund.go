@@ -3,7 +3,7 @@ package order
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/yuyan2077/payjs/util"
+	"github.com/qingwg/payjs/util"
 )
 
 const getRefundURL = "https://payjs.cn/api/refund"

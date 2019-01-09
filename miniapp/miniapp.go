@@ -1,8 +1,8 @@
 package miniapp
 
 import (
-	"github.com/yuyan2077/payjs/context"
-	"github.com/yuyan2077/payjs/util"
+	"github.com/qingwg/payjs/context"
+	"github.com/qingwg/payjs/util"
 )
 
 // MiniApp struct

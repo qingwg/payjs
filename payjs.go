@@ -1,17 +1,17 @@
 package payjs
 
 import (
-	"github.com/yuyan2077/payjs/cashier"
-	"github.com/yuyan2077/payjs/context"
-	"github.com/yuyan2077/payjs/facepay"
-	"github.com/yuyan2077/payjs/js"
-	"github.com/yuyan2077/payjs/mch"
-	"github.com/yuyan2077/payjs/micropay"
-	"github.com/yuyan2077/payjs/miniapp"
-	"github.com/yuyan2077/payjs/native"
-	"github.com/yuyan2077/payjs/order"
-	"github.com/yuyan2077/payjs/server"
-	"github.com/yuyan2077/payjs/user"
+	"github.com/qingwg/payjs/cashier"
+	"github.com/qingwg/payjs/context"
+	"github.com/qingwg/payjs/facepay"
+	"github.com/qingwg/payjs/js"
+	"github.com/qingwg/payjs/mch"
+	"github.com/qingwg/payjs/micropay"
+	"github.com/qingwg/payjs/miniapp"
+	"github.com/qingwg/payjs/native"
+	"github.com/qingwg/payjs/order"
+	"github.com/qingwg/payjs/server"
+	"github.com/qingwg/payjs/user"
 	"net/http"
 )
 
