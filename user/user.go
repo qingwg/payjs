@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/qingwg/payjs/context"
 	"github.com/qingwg/payjs/util"
+	"net/url"
+	"sort"
+	"strings"
 )
 
 const getUserInfoURL = "https://payjs.cn/api/user"
@@ -23,10 +26,10 @@ type UserInfoRequest struct {
 
 // UserInfoResponse PayJS返回参数
 type UserInfoResponse struct {
-	ReturnCode int    `json:"return_code"` //Y	1:请求成功 0:请求失败
-	ReturnMsg  string `json:"return_msg"`  //Y	返回消息
+	ReturnCode int      `json:"return_code"` //Y	1:请求成功 0:请求失败
+	ReturnMsg  string   `json:"return_msg"`  //Y	返回消息
 	User       UserInfo `json:"user"`        //N	用户资料
-	Sign       string `json:"sign"`        //Y	数据签名 详见签名算法
+	Sign       string   `json:"sign"`        //Y	数据签名 详见签名算法
 }
 
 // UserInfo 用户参数说明(同微信官方文档)
@@ -81,6 +84,51 @@ func (user *User) GetUserInfo(userInfoRequest *UserInfoRequest) (userInfoRespons
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
 	}
+	return
+}
+
+// GetRequestUrl 获取请求url
+func (user *User) GetRequestUrl(callbackUrlReq string) (src string, err error) {
+	cashierRequest := CashierRequest{
+		MchID:       cashier.MchID,
+		TotalFee:    totalFeeReq,
+		OutTradeNo:  outTradeNoReq,
+		Body:        bodyReq,
+		Attach:      attachReq,
+		NotifyUrl:   cashier.NotifyUrl,
+		CallbackUrl: callbackUrlReq,
+		Auto:        auto,
+		Hide:        hide,
+	}
+	sign := util.Signature(cashierRequest, cashier.Key)
+	cashierRequest.Sign = sign
+
+	var params = url.Values{}
+	jsonbs, _ := json.Marshal(cashierRequest)
+	jsonmap := make(map[string]interface{})
+	json.Unmarshal(jsonbs, &jsonmap)
+	for k, v := range jsonmap {
+		params.Add(k, fmt.Sprintf("%v", v))
+	}
+
+	var keys = make([]string, 0, 0)
+	for key := range params {
+		if params.Get(key) != `` {
+			keys = append(keys, key)
+		}
+	}
+	sort.Strings(keys)
+
+	var pList = make([]string, 0, 0)
+	for _, key := range keys {
+		var value = strings.TrimSpace(params.Get(key))
+		if len(value) > 0 {
+			pList = append(pList, key+"="+value)
+		}
+	}
+
+	src = getCashierURL + "?"
+	src += strings.Join(pList, "&")
 	return
 }
 
