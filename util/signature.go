@@ -19,8 +19,7 @@ func Signature(message interface{}, privKey string) (sign string) {
 	}
 
 	params.Del(`sign`)
-	params.Del(`status`)
-	params.Del(`msg`)
+	fmt.Println("=====params", params)
 	var keys = make([]string, 0, 0)
 	for key := range params {
 		if params.Get(key) != `` {

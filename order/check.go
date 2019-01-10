@@ -23,6 +23,7 @@ type CheckResponse struct {
 	TransactionID string `json:"transaction_id"` //N	微信显示订单号
 	Status        int    `json:"status"`         //Y	0：未支付，1：支付成功
 	Openid        string `json:"openid"`         //N	用户 OPENID
+	TotalFee      int    `json:"total_fee"`      //N	订单金额
 	PaidTime      string `json:"paid_time"`      //N	订单支付时间
 	Attach        string `json:"attach"`         //N	用户自定义数据
 	Sign          string `json:"sign"`           //Y	数据签名 详见签名算法
@@ -33,23 +34,25 @@ func (order *Order) Check(payJSOrderID string) (checkResponse CheckResponse, err
 	checkRequest := CheckRequest{
 		PayJSOrderID: payJSOrderID,
 	}
-	sign := util.Signature(checkRequest, order.Context.Key)
+	sign := util.Signature(checkRequest, order.Key)
 	checkRequest.Sign = sign
-	response, err := util.PostJSON(getCloseURL, checkRequest)
+	response, err := util.PostJSON(getCheckURL, checkRequest)
 	if err != nil {
 		return
 	}
+
+	fmt.Println("====response", string(response))
 	err = json.Unmarshal(response, &checkResponse)
 	if err != nil {
 		return
 	}
 	if checkResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", checkResponse.ReturnCode)
+		err = fmt.Errorf("OrderCheck Error , errcode=%d , errmsg=%s", checkResponse.ReturnCode)
 		return
 	}
 	// 检测sign
 	msgSignature := checkResponse.Sign
-	msgSignatureGen := util.Signature(checkResponse, order.Context.Key)
+	msgSignatureGen := util.Signature(checkResponse, order.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
