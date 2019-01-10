@@ -23,8 +23,11 @@ type CloseResponse struct {
 }
 
 // Close 关闭已经发起的订单
-func (order *Order) Close(closeRequest *CloseRequest) (closeResponse CloseResponse, err error) {
-	sign := util.Signature(closeRequest, order.Context.Key)
+func (order *Order) Close(payJSOrderID string) (closeResponse CloseResponse, err error) {
+	closeRequest := CloseRequest{
+		PayJSOrderID: payJSOrderID,
+	}
+	sign := util.Signature(closeRequest, order.Key)
 	closeRequest.Sign = sign
 	response, err := util.PostJSON(getCloseURL, closeRequest)
 	if err != nil {
@@ -35,12 +38,12 @@ func (order *Order) Close(closeRequest *CloseRequest) (closeResponse CloseRespon
 		return
 	}
 	if closeResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", closeResponse.ReturnCode, closeResponse.ReturnMsg)
+		err = fmt.Errorf("OrderClose Error , errcode=%d , errmsg=%s", closeResponse.ReturnCode, closeResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
 	msgSignature := closeResponse.Sign
-	msgSignatureGen := util.Signature(closeResponse, order.Context.Key)
+	msgSignatureGen := util.Signature(closeResponse, order.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
