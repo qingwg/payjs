@@ -8,15 +8,12 @@ import (
 )
 
 const getJsApiURL = "https://payjs.cn/api/jsapi"
-const getOpenidURL = "https://payjs.cn/api/openid"
 
 // Js struct
 type Js struct {
 	*context.Context
 
 	debug bool
-
-	openID string
 }
 
 // JsApiRequest
@@ -45,17 +42,6 @@ func NewJs(context *context.Context) *Js {
 	js := new(Js)
 	js.Context = context
 	return js
-}
-
-// GetRequestOpenidUrl 获取浏览器跳转的url
-func (js *Js) GetRequestOpenidUrl(callbackUrl string) string {
-	return getOpenidURL + "?callback_url=" + callbackUrl
-}
-
-//Serve 处理PayJS支付成功推送的消息
-func (js *Js) Serve() (err error) {
-	js.openID = js.Query("openid")
-	return
 }
 
 // GetJsApi 获取发起支付所需要的参数

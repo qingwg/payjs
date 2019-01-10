@@ -9,8 +9,8 @@ import (
 	"github.com/qingwg/payjs/micropay"
 	"github.com/qingwg/payjs/miniapp"
 	"github.com/qingwg/payjs/native"
+	"github.com/qingwg/payjs/notify"
 	"github.com/qingwg/payjs/order"
-	"github.com/qingwg/payjs/server"
 	"github.com/qingwg/payjs/user"
 	"net/http"
 )
@@ -55,9 +55,7 @@ func (payjs *PayJS) GetCashier() *cashier.Cashier {
 }
 
 // GetJs JSAPI 接口
-func (payjs *PayJS) GetJs(req *http.Request, writer http.ResponseWriter) *js.Js {
-	payjs.Context.Request = req
-	payjs.Context.Writer = writer
+func (payjs *PayJS) GetJs() *js.Js {
 	return js.NewJs(payjs.Context)
 }
 
@@ -77,10 +75,8 @@ func (payjs *PayJS) GetOrder() *order.Order {
 }
 
 // GetServer 异步通知消息管理
-func (payjs *PayJS) GetServer(req *http.Request, writer http.ResponseWriter) *server.Server {
-	payjs.Context.Request = req
-	payjs.Context.Writer = writer
-	return server.NewServer(payjs.Context)
+func (payjs *PayJS) GetNotify(req *http.Request, writer http.ResponseWriter) *notify.Notify {
+	return notify.NewNotify(payjs.Context, req, writer)
 }
 
 // GetUser 用户 用户详情
