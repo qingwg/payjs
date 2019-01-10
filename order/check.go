@@ -29,7 +29,10 @@ type CheckResponse struct {
 }
 
 // Check 用户发起支付后，可通过本接口发起订单查询来确认订单状态
-func (order *Order) Check(checkRequest *CheckRequest) (checkResponse CheckResponse, err error) {
+func (order *Order) Check(payJSOrderID string) (checkResponse CheckResponse, err error) {
+	checkRequest := CheckRequest{
+		PayJSOrderID: payJSOrderID,
+	}
 	sign := util.Signature(checkRequest, order.Context.Key)
 	checkRequest.Sign = sign
 	response, err := util.PostJSON(getCloseURL, checkRequest)
