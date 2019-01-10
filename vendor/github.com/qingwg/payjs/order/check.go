@@ -41,6 +41,7 @@ func (order *Order) Check(payJSOrderID string) (checkResponse CheckResponse, err
 		return
 	}
 
+	fmt.Println("====response", string(response))
 	err = json.Unmarshal(response, &checkResponse)
 	if err != nil {
 		return
