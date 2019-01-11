@@ -15,6 +15,10 @@ func Signature(message interface{}, privKey string) (sign string) {
 	jsonmap := make(map[string]interface{})
 	json.Unmarshal(jsonbs, &jsonmap)
 	for k, v := range jsonmap {
+		//if v != nil {
+		//	params.Add(k, fmt.Sprintf("%v", v))
+		//}
+
 		params.Add(k, fmt.Sprintf("%v", v))
 	}
 
@@ -24,8 +28,10 @@ func Signature(message interface{}, privKey string) (sign string) {
 		if params.Get(key) != `` {
 			keys = append(keys, key)
 		}
+		//keys = append(keys, key)
 	}
 	sort.Strings(keys)
+	fmt.Println("======keys", keys)
 
 	var pList = make([]string, 0, 0)
 	for _, key := range keys {

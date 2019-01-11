@@ -43,7 +43,7 @@ func NewMch(context *context.Context) *Mch {
 // GetMchInfo 请求PayJS获取支付二维码
 func (mch *Mch) GetMchInfo() (mchInfoResponse MchInfoResponse, err error) {
 	mchInfoRequest := MchInfoRequest{
-		MchID:      mch.MchID,
+		MchID: mch.MchID,
 	}
 	sign := util.Signature(mchInfoRequest, mch.Key)
 	mchInfoRequest.Sign = sign
@@ -51,6 +51,7 @@ func (mch *Mch) GetMchInfo() (mchInfoResponse MchInfoResponse, err error) {
 	if err != nil {
 		return
 	}
+	fmt.Println("===response", string(response))
 	err = json.Unmarshal(response, &mchInfoResponse)
 	if err != nil {
 		return
