@@ -1,7 +1,4 @@
 # PayJS SDK for Go
-[![Build Status](https://travis-ci.org/silenceper/wechat.svg?branch=master)](https://travis-ci.org/silenceper/wechat)
-[![Go Report Card](https://goreportcard.com/badge/github.com/silenceper/wechat)](https://goreportcard.com/report/github.com/silenceper/wechat)
-[![GoDoc](http://godoc.org/github.com/silenceper/wechat?status.svg)](http://godoc.org/github.com/silenceper/wechat)
 
 
 使用Golang开发的PayJS SDK，简单、易用。
@@ -11,10 +8,9 @@
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
 ## TODO
-- [ ] 更新日志
-- [ ] 文档
-- [ ] 部分SDK测试
-- [ ] 部分SDK演示
+- 商户资料接口签名验证失败BUG
+- 付款码支付接口测试及演示
+- JSAPI支付接口测试及演示
 
 #### 和主流框架配合使用
 

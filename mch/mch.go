@@ -51,7 +51,7 @@ func (mch *Mch) GetMchInfo() (mchInfoResponse MchInfoResponse, err error) {
 	if err != nil {
 		return
 	}
-	fmt.Println("===response", string(response))
+
 	err = json.Unmarshal(response, &mchInfoResponse)
 	if err != nil {
 		return

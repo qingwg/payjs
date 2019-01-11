@@ -12,8 +12,6 @@ const getJsApiURL = "https://payjs.cn/api/jsapi"
 // Js struct
 type Js struct {
 	*context.Context
-
-	debug bool
 }
 
 // JsApiRequest
@@ -33,8 +31,18 @@ type JsApiResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	0:失败 1:成功
 	ReturnMsg    string `json:"return_msg"`     //Y	失败原因
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 侧订单号
-	JsApi        string `json:"jsapi"`          //N	用于发起支付的支付参数
+	JsApi        JsApi  `json:"jsapi"`          //N	用于发起支付的支付参数
 	Sign         string `json:"sign"`           //Y	数据签名
+}
+
+// JsApi
+type JsApi struct {
+	AppID     string `json:"appId"`
+	TimeStamp string `json:"timeStamp"`
+	NonceStr  string `json:"nonceStr"`
+	Package   string `json:"package"`
+	SignType  string `json:"signType"`
+	PaySign   string `json:"paySign"`
 }
 
 //NewJs init
@@ -44,14 +52,24 @@ func NewJs(context *context.Context) *Js {
 	return js
 }
 
-// GetJsApi 获取发起支付所需要的参数
-func (js *Js) GetJsApi(jsApiRequest *JsApiRequest) (jsApiResponse JsApiResponse, err error) {
-	sign := util.Signature(jsApiRequest, js.Context.Key)
+// Create 获取发起支付所需要的参数
+func (js *Js) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openid string) (jsApiResponse JsApiResponse, err error) {
+	jsApiRequest := JsApiRequest{
+		MchID:      js.MchID,
+		TotalFee:   totalFeeReq,
+		OutTradeNo: outTradeNoReq,
+		Body:       bodyReq,
+		Attach:     attachReq,
+		NotifyUrl:  js.NotifyUrl,
+		Openid:     openid,
+	}
+	sign := util.Signature(jsApiRequest, js.Key)
 	jsApiRequest.Sign = sign
 	response, err := util.PostJSON(getJsApiURL, jsApiRequest)
 	if err != nil {
 		return
 	}
+	fmt.Println("=====response", string(response))
 	err = json.Unmarshal(response, &jsApiResponse)
 	if err != nil {
 		return
@@ -62,7 +80,7 @@ func (js *Js) GetJsApi(jsApiRequest *JsApiRequest) (jsApiResponse JsApiResponse,
 	}
 	// 检测sign
 	msgSignature := jsApiResponse.Sign
-	msgSignatureGen := util.Signature(jsApiResponse, js.Context.Key)
+	msgSignatureGen := util.Signature(jsApiResponse, js.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
