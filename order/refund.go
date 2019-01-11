@@ -25,10 +25,13 @@ type RefundResponse struct {
 }
 
 // Refund 对已经支付的订单发起退款
-func (order *Order) Refund(refundRequest *RefundRequest) (refundResponse RefundResponse, err error) {
+func (order *Order) Refund(payJSOrderID string) (refundResponse RefundResponse, err error) {
+	refundRequest := RefundRequest{
+		PayJSOrderID: payJSOrderID,
+	}
 	sign := util.Signature(refundRequest, order.Context.Key)
 	refundRequest.Sign = sign
-	response, err := util.PostJSON(getCloseURL, refundRequest)
+	response, err := util.PostJSON(getRefundURL, refundRequest)
 	if err != nil {
 		return
 	}
@@ -37,7 +40,7 @@ func (order *Order) Refund(refundRequest *RefundRequest) (refundResponse RefundR
 		return
 	}
 	if refundResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", refundResponse.ReturnCode, refundResponse.ReturnMsg)
+		err = fmt.Errorf("OrderRefund Error , errcode=%d , errmsg=%s", refundResponse.ReturnCode, refundResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
