@@ -29,7 +29,7 @@ func (order *Order) Refund(payJSOrderID string) (refundResponse RefundResponse, 
 	refundRequest := RefundRequest{
 		PayJSOrderID: payJSOrderID,
 	}
-	sign := util.Signature(refundRequest, order.Context.Key)
+	sign := util.Signature(refundRequest, order.Key)
 	refundRequest.Sign = sign
 	response, err := util.PostJSON(getRefundURL, refundRequest)
 	if err != nil {
@@ -45,7 +45,7 @@ func (order *Order) Refund(payJSOrderID string) (refundResponse RefundResponse, 
 	}
 	// 检测sign
 	msgSignature := refundResponse.Sign
-	msgSignatureGen := util.Signature(refundResponse, order.Context.Key)
+	msgSignatureGen := util.Signature(refundResponse, order.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
