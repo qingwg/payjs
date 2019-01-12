@@ -176,7 +176,7 @@ PayFacepay.Create(Request.TotalFee, Request.Body, Request.OutTradeNo, Request.At
 PayOrder := Pay.GetOrder()
 ```
 
-###查询
+#### 查询
 ```go
 type Request struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -186,7 +186,7 @@ PayOrder.Check(Request.PayJSOrderID)
 官方文档：[订单-查询
 ](https://help.payjs.cn/api-lie-biao/ding-dan-cha-xun.html)
 
-###关闭
+#### 关闭
 ```go
 type Request struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -196,7 +196,7 @@ PayOrder.Close(Request.PayJSOrderID)
 官方文档：[订单-关闭
 ](https://help.payjs.cn/api-lie-biao/guan-bi-ding-dan.html)
 
-###撤销（未测试）
+#### 撤销（未测试）
 ```go
 type Request struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -206,7 +206,7 @@ PayOrder.Reverse(Request.PayJSOrderID)
 官方文档：[订单-撤销
 ](https://help.payjs.cn/api-lie-biao/che-xiao-ding-dan.html)
 
-###退款
+#### 退款
 ```go
 type Request struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -249,7 +249,7 @@ PayNotify.SendResponseMsg()
 PayUser := Pay.GetUser()
 ```
 
-###获取浏览器跳转的url
+#### 获取浏览器跳转的url
 ```go
 type Request struct {
 	CallbackUrl string `json:"callback_url"` //Y	接收 openid 的 url。必须为可直接访问的url，不能带session验证、csrf验证。url 可携带最多1个参数，多个参数会自动忽略
@@ -259,7 +259,7 @@ PayUser.GetUserOpenIDUrl(Request.CallbackUrl)
 官方文档：[用户-获取浏览器跳转的url
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
-###获取openid
+#### 获取openid
 ```go
 // 在callback_url方法内，传入request
 PayUser.GetUserOpenID(request)
