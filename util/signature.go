@@ -19,13 +19,11 @@ func Signature(message interface{}, privKey string) (sign string) {
 		default:
 			params.Add(k, fmt.Sprintf("%v", v))
 		case map[string]interface{}:
-			for kk, vv := range t {
-				params.Add(kk, fmt.Sprintf("%v", vv))
-			}
+			res, _ := json.Marshal(t)
+			params.Add(k, fmt.Sprintf("%v", string(res)))
 		}
 	}
-	fmt.Println(params.Encode())
-
+	fmt.Println("======params", params)
 	params.Del(`sign`)
 
 	var keys = make([]string, 0, 0)
@@ -33,10 +31,8 @@ func Signature(message interface{}, privKey string) (sign string) {
 		if params.Get(key) != `` {
 			keys = append(keys, key)
 		}
-		//keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	fmt.Println("=====keys", keys)
 
 	var pList = make([]string, 0, 0)
 	for _, key := range keys {
