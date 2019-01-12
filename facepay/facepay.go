@@ -44,8 +44,17 @@ func NewFacepay(context *context.Context) *Facepay {
 	return facepay
 }
 
-// GetFacepay
-func (facepay *Facepay) GetFacepay(facepayRequest *FacepayRequest) (facepayResponse FacepayResponse, err error) {
+// Create
+func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openidReq, faceCode string) (facepayResponse FacepayResponse, err error) {
+	facepayRequest := FacepayRequest{
+		MchID:      facepay.MchID,
+		TotalFee:   totalFeeReq,
+		OutTradeNo: outTradeNoReq,
+		Body:       bodyReq,
+		Attach:     attachReq,
+		Openid:     openidReq,
+		FaceCode:   faceCode,
+	}
 	sign := util.Signature(facepayRequest, facepay.Context.Key)
 	facepayRequest.Sign = sign
 	response, err := util.PostJSON(getFacepayURL, facepayRequest)

@@ -1,6 +1,7 @@
 package payjs
 
 import (
+	"github.com/qingwg/payjs/bank"
 	"github.com/qingwg/payjs/cashier"
 	"github.com/qingwg/payjs/context"
 	"github.com/qingwg/payjs/facepay"
@@ -87,4 +88,9 @@ func (payjs *PayJS) GetUser() *user.User {
 // GetMch 商户 商户详情
 func (payjs *PayJS) GetMch() *mch.Mch {
 	return mch.NewMch(payjs.Context)
+}
+
+// GetBank 银行编码查询
+func (payjs *PayJS) GetBank() *bank.Bank {
+	return bank.NewBank(payjs.Context)
 }

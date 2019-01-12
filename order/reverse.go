@@ -23,7 +23,10 @@ type ReverseResponse struct {
 }
 
 // Reverse 撤销订单
-func (order *Order) Reverse(reverseRequest *ReverseRequest) (reverseResponse ReverseResponse, err error) {
+func (order *Order) Reverse(payJSOrderID string) (reverseResponse ReverseResponse, err error) {
+	reverseRequest := ReverseRequest{
+		PayJSOrderID: payJSOrderID,
+	}
 	sign := util.Signature(reverseRequest, order.Context.Key)
 	reverseRequest.Sign = sign
 	response, err := util.PostJSON(getReverseURL, reverseRequest)

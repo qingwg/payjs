@@ -10,8 +10,7 @@ import (
 
 //Signature 签名
 func Signature(message interface{}, privKey string) (sign string) {
-	fmt.Println("=====message", message)
-	var params = url.Values{"a": []string{}}
+	var params = url.Values{}
 	jsonbs, _ := json.Marshal(message)
 	jsonmap := make(map[string]interface{})
 	json.Unmarshal(jsonbs, &jsonmap)
@@ -21,10 +20,11 @@ func Signature(message interface{}, privKey string) (sign string) {
 			params.Add(k, fmt.Sprintf("%v", v))
 		case map[string]interface{}:
 			for kk, vv := range t {
-				params.Add(k+"["+kk+"]", fmt.Sprintf("%v", vv))
+				params.Add(kk, fmt.Sprintf("%v", vv))
 			}
 		}
 	}
+	fmt.Println(params.Encode())
 
 	params.Del(`sign`)
 

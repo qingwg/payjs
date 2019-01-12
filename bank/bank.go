@@ -16,9 +16,9 @@ type Bank struct {
 
 // BankInfoRequest 请求参数
 type BankInfoRequest struct {
-	MchID  string `json:"mchid"`  //Y	商户号
-	Bank string `json:"bank"` //Y	银行简写
-	Sign   string `json:"sign"`   //Y	数据签名 详见签名算法
+	MchID string `json:"mchid"` //Y	商户号
+	Bank  string `json:"bank"`  //Y	银行简写
+	Sign  string `json:"sign"`  //Y	数据签名 详见签名算法
 }
 
 // BankInfoResponse PayJS返回参数
@@ -37,7 +37,11 @@ func NewBank(context *context.Context) *Bank {
 }
 
 // GetBankInfo 根据银行简称查询银行详细名称。银行数据库会随时更新
-func (bank *Bank) GetBankInfo(bankInfoRequest *BankInfoRequest) (bankInfoResponse BankInfoResponse, err error) {
+func (bank *Bank) GetBankInfo(bankReq string) (bankInfoResponse BankInfoResponse, err error) {
+	bankInfoRequest := BankInfoRequest{
+		MchID: bank.MchID,
+		Bank:  bankReq,
+	}
 	sign := util.Signature(bankInfoRequest, bank.Context.Key)
 	bankInfoRequest.Sign = sign
 	response, err := util.PostJSON(getBankInfoURL, bankInfoRequest)

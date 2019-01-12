@@ -44,7 +44,7 @@ func NewMicropay(context *context.Context) *Micropay {
 }
 
 // GetMicropay 拿到扫码信息请求PayJS
-func (micropay *Micropay) GetMicropay(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (outTradeNoResp string, totalFeeResp int, payJSOrderIDResp string, err error) {
+func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (outTradeNoResp string, totalFeeResp int, payJSOrderIDResp string, err error) {
 	micropayRequest := MicropayRequest{
 		MchID:      micropay.MchID,
 		TotalFee:   totalFeeReq,
