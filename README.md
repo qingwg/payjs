@@ -8,6 +8,7 @@
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
 ## TODO
+- examples未完成
 - 商户资料签名验证失败BUG
 - JSAPI支付签名验证失败BUG
 - 付款码支付测试及演示
