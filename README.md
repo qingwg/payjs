@@ -129,7 +129,7 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 官方文档：[收银台支付
 ](https://help.payjs.cn/api-lie-biao/shou-yin-tai-zhi-fu.html)
 
-## JSAPI支付（签名验证有bug，目前先取消）
+## JSAPI支付（签名验证有bug，目前先取消签名验证）
 
 下面的是伪代码，请自行理解
 ```go
@@ -370,7 +370,7 @@ openid, err := PayUser.GetUserOpenID(request)
 官方文档：[用户-获取openid
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
-## 商户资料（签名验证有bug，目前先取消）
+## 商户资料（签名验证有bug，目前先取消签名验证）
 
 下面的是伪代码，请自行理解
 ```go
