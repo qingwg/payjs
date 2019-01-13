@@ -30,7 +30,7 @@ func NewMiniApp(context *context.Context) *MiniApp {
 }
 
 // GetOrderInfo 获取小程序跳转所需的参数
-func (miniApp *MiniApp) GetOrderInfo(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, nonceReq string) OrderInfo {
+func (miniApp *MiniApp) GetOrderInfo(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) OrderInfo {
 	orderInfo := OrderInfo{
 		MchID:      miniApp.MchID,
 		TotalFee:   totalFeeReq,
@@ -38,7 +38,7 @@ func (miniApp *MiniApp) GetOrderInfo(totalFeeReq int, bodyReq, outTradeNoReq, at
 		Body:       bodyReq,
 		Attach:     attachReq,
 		NotifyUrl:  miniApp.NotifyUrl,
-		Nonce:      nonceReq,
+		Nonce:      util.RandomStr(32),
 	}
 	sign := util.Signature(orderInfo, miniApp.Key)
 	orderInfo.Sign = sign
