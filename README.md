@@ -55,6 +55,7 @@ Pay = payjs.New(payjsConfig)
 - [银行编码查询](#银行编码查询)
 
 ## 扫码支付
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -82,6 +83,7 @@ Response, err := PayNative.Create(Request.TotalFee, Request.Body, Request.OutTra
 ](https://help.payjs.cn/api-lie-biao/sao-ma-zhi-fu.html)
 
 ## 付款码支付（未测试）
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -108,6 +110,7 @@ Response, err := PayMicropay.Create(Request.TotalFee, Request.Body, Request.OutT
 ](https://help.payjs.cn/api-lie-biao/shua-qia-zhi-fu.html)
 
 ## 收银台支付
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -127,6 +130,7 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 ](https://help.payjs.cn/api-lie-biao/shou-yin-tai-zhi-fu.html)
 
 ## JSAPI支付（签名验证有bug，目前先取消）
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -151,6 +155,7 @@ Response, err := PayJS.Create(Request.TotalFee, Request.Body, Request.OutTradeNo
 ](https://help.payjs.cn/api-lie-biao/jsapiyuan-sheng-zhi-fu.html)
 
 ## 小程序支付
+
 下面的是伪代码，请自行理解
 
 小程序发起支付的解决方案有两种，仅供测试使用
@@ -184,6 +189,7 @@ Response, err := PayMiniApp.GetOrderInfo(Request.TotalFee, Request.Body, Request
 ](https://help.payjs.cn/api-lie-biao/xiao-cheng-xu-zhi-fu.html)
 
 ## 人脸支付（未测试）
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -211,6 +217,7 @@ Response, err := PayFacepay.Create(Request.TotalFee, Request.Body, Request.OutTr
 ](https://help.payjs.cn/api-lie-biao/ren-lian-zhi-fu.html)
 
 ## 订单
+
 下面的是伪代码，请自行理解
 ```go
 // 初始化
@@ -218,6 +225,7 @@ PayOrder := Pay.GetOrder()
 ```
 
 #### 查询
+
 ```go
 type Request struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -241,6 +249,7 @@ Response, err := PayOrder.Check(Request.PayJSOrderID)
 ](https://help.payjs.cn/api-lie-biao/ding-dan-cha-xun.html)
 
 #### 关闭
+
 ```go
 type Request struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -257,6 +266,7 @@ Response, err := Response, err := PayOrder.Close(Request.PayJSOrderID)
 ](https://help.payjs.cn/api-lie-biao/guan-bi-ding-dan.html)
 
 #### 撤销（未测试）
+
 ```go
 type Request struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -273,6 +283,7 @@ Response, err := PayOrder.Reverse(Request.PayJSOrderID)
 ](https://help.payjs.cn/api-lie-biao/che-xiao-ding-dan.html)
 
 #### 退款
+
 ```go
 type Request struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
@@ -291,6 +302,7 @@ Response, err := PayOrder.Refund(Request.PayJSOrderID)
 ](https://help.payjs.cn/api-lie-biao/tui-kuan.html)
 
 ## 异步通知
+
 下面的是伪代码，请自行理解
 ```go
 // Message PayJS支付成功异步通知过来的内容
@@ -331,6 +343,7 @@ PayNotify.SendResponseMsg()
 ](https://help.payjs.cn/api-lie-biao/jiao-yi-xin-xi-tui-song.html)
 
 ## 用户
+
 下面的是伪代码，请自行理解
 ```go
 // 初始化
@@ -338,6 +351,7 @@ PayUser := Pay.GetUser()
 ```
 
 #### 获取浏览器跳转的url
+
 ```go
 type Request struct {
     CallbackUrl string `json:"callback_url"` //Y	接收 openid 的 url。必须为可直接访问的url，不能带session验证、csrf验证。url 可携带最多1个参数，多个参数会自动忽略
@@ -348,6 +362,7 @@ url, err := PayUser.GetUserOpenIDUrl(Request.CallbackUrl)
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
 #### 获取openid
+
 ```go
 // 在callback_url方法内，传入request
 openid, err := PayUser.GetUserOpenID(request)
@@ -356,6 +371,7 @@ openid, err := PayUser.GetUserOpenID(request)
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
 ## 商户资料（签名验证有bug，目前先取消）
+
 下面的是伪代码，请自行理解
 ```go
 type Response struct {
@@ -377,6 +393,7 @@ Response, err := PayMch.GetMchInfo()
 ](https://help.payjs.cn/api-lie-biao/shang-hu-zi-liao.html)
 
 ## 银行编码查询（未测试）
+
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
