@@ -8,23 +8,16 @@
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
 ## TODO
-- examples未完成
-- 商户资料签名验证失败BUG
-- JSAPI支付签名验证失败BUG
+
+- 商户资料签名验证失败BUG，为了正常使用，暂取消验证报错
+- JSAPI支付签名验证失败BUG，为了正常使用，暂取消验证报错
 - 付款码支付测试及演示
 - JSAPI支付测试及演示
-- 小程序支付测试及演示
+- 小程序支付演示
 - 人脸支付测试及演示
 - 订单-撤销测试及演示
-- 异步通知演示
 - 商户资料测试及演示
 - 银行编码查询测试及演示
-
-#### 和主流框架配合使用
-
-主要是request和responseWriter在不同框架中获取方式可能不一样：
-
-- Gin Framework: [./examples/gin](./examples/gin)
 
 ## 基本配置及初始化
 下面的是伪代码，请自行理解

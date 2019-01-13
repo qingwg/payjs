@@ -55,7 +55,7 @@ func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachRe
 		Openid:     openidReq,
 		FaceCode:   faceCode,
 	}
-	sign := util.Signature(facepayRequest, facepay.Context.Key)
+	sign := util.Signature(facepayRequest, facepay.Key)
 	facepayRequest.Sign = sign
 	response, err := util.PostJSON(getFacepayURL, facepayRequest)
 	if err != nil {
@@ -71,7 +71,7 @@ func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachRe
 	}
 	// 检测sign
 	msgSignature := facepayResponse.Sign
-	msgSignatureGen := util.Signature(facepayResponse, facepay.Context.Key)
+	msgSignatureGen := util.Signature(facepayResponse, facepay.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return

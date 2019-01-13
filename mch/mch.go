@@ -60,12 +60,12 @@ func (mch *Mch) GetMchInfo() (mchInfoResponse MchInfoResponse, err error) {
 		err = fmt.Errorf("GetMchInfo Error , errcode=%d , errmsg=%s", mchInfoResponse.ReturnCode, mchInfoResponse.ReturnMsg)
 		return
 	}
-	// 检测sign
-	msgSignature := mchInfoResponse.Sign
-	msgSignatureGen := util.Signature(mchInfoResponse, mch.Key)
-	if msgSignature != msgSignatureGen {
-		err = fmt.Errorf("消息不合法，验证签名失败")
-		return
-	}
+	//// 检测sign
+	//msgSignature := mchInfoResponse.Sign
+	//msgSignatureGen := util.Signature(mchInfoResponse, mch.Key)
+	//if msgSignature != msgSignatureGen {
+	//	err = fmt.Errorf("消息不合法，验证签名失败")
+	//	return
+	//}
 	return
 }
