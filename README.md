@@ -14,7 +14,7 @@
 - 商户资料签名验证失败BUG，为了正常使用，暂取消验证报错
 - JSAPI支付签名验证失败BUG，为了正常使用，暂取消验证报错
 - 付款码支付测试及演示，没有硬件设备无法完成
-- JSAPI支付测试及演示，没有设置JSAPI支付目录无法完成
+- JSAPI支付演示，没有设置JSAPI支付目录无法完成
 - 小程序支付演示，没有申请小程序无法完成
 - 人脸支付测试及演示，没有硬件设备无法完成
 - 订单-撤销测试及演示，没有硬件设备无法完成
@@ -126,7 +126,7 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 官方文档：[收银台支付
 ](https://help.payjs.cn/api-lie-biao/shou-yin-tai-zhi-fu.html)
 
-## JSAPI支付（未测试）（有bug）
+## JSAPI支付（签名验证有bug，目前先取消）
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
@@ -150,7 +150,7 @@ Response, err := PayJS.Create(Request.TotalFee, Request.Body, Request.OutTradeNo
 官方文档：[JSAPI支付
 ](https://help.payjs.cn/api-lie-biao/jsapiyuan-sheng-zhi-fu.html)
 
-## 小程序支付（未测试）
+## 小程序支付
 下面的是伪代码，请自行理解
 
 小程序发起支付的解决方案有两种，仅供测试使用
@@ -355,7 +355,7 @@ openid, err := PayUser.GetUserOpenID(request)
 官方文档：[用户-获取openid
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
-## 商户资料（未测试）（有bug）
+## 商户资料（签名验证有bug，目前先取消）
 下面的是伪代码，请自行理解
 ```go
 type Response struct {
