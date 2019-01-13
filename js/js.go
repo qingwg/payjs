@@ -69,7 +69,7 @@ func (js *Js) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openid 
 	if err != nil {
 		return
 	}
-	fmt.Println("=====response", string(response))
+
 	err = json.Unmarshal(response, &jsApiResponse)
 	if err != nil {
 		return
