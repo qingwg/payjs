@@ -42,7 +42,7 @@ func (bank *Bank) GetBankInfo(bankReq string) (bankInfoResponse BankInfoResponse
 		MchID: bank.MchID,
 		Bank:  bankReq,
 	}
-	sign := util.Signature(bankInfoRequest, bank.Context.Key)
+	sign := util.Signature(bankInfoRequest, bank.Key)
 	bankInfoRequest.Sign = sign
 	response, err := util.PostJSON(getBankInfoURL, bankInfoRequest)
 	if err != nil {
@@ -58,7 +58,7 @@ func (bank *Bank) GetBankInfo(bankReq string) (bankInfoResponse BankInfoResponse
 	}
 	// 检测sign
 	msgSignature := bankInfoResponse.Sign
-	msgSignatureGen := util.Signature(bankInfoResponse, bank.Context.Key)
+	msgSignatureGen := util.Signature(bankInfoResponse, bank.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
