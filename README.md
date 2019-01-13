@@ -11,13 +11,14 @@
 
 ## TODO
 
-- 商户资料签名验证失败BUG，为了正常使用，暂取消验证报错
-- JSAPI支付签名验证失败BUG，为了正常使用，暂取消验证报错
-- 付款码支付测试及演示，没有硬件设备无法完成
-- JSAPI支付演示，没有设置JSAPI支付目录无法完成
-- 小程序支付演示，没有申请小程序无法完成
-- 人脸支付测试及演示，没有硬件设备无法完成
-- 订单-撤销测试及演示，没有硬件设备无法完成
+- 商户资料签名验证失败BUG（为了正常使用，暂取消验证报错）
+- JSAPI支付签名验证失败BUG（为了正常使用，暂取消验证报错）
+- 获取用户资料验证失败BUG（为了正常使用，暂取消验证报错）
+- 付款码支付测试及演示（没有硬件设备暂无法完成）
+- JSAPI支付演示（没有设置JSAPI支付目录暂无法完成）
+- 小程序支付演示（没有申请小程序暂无法完成）
+- 人脸支付测试及演示（没有硬件设备暂无法完成）
+- 订单-撤销测试及演示（没有硬件设备暂无法完成）
 - 银行编码查询测试及演示
 - 演示程序还有一些细节需要完成
 
@@ -50,7 +51,7 @@ Pay = payjs.New(payjsConfig)
 - [用户](#用户)
     - 获取浏览器跳转的url
 	- 获取openid
-	- ~~获取用户资料~~（即将废弃，SDK相应代码已删除）
+	- 获取用户资料（PayJS官方即将废弃此接口）
 - [商户资料](#商户)
 - [银行编码查询](#银行编码查询)
 
@@ -146,6 +147,15 @@ type Response struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 侧订单号
     JsApi        JsApi  `json:"jsapi"`          //N	用于发起支付的支付参数
     Sign         string `json:"sign"`           //Y	数据签名
+}
+// JsApi
+type JsApi struct {
+	AppID     string `json:"appId"`
+	TimeStamp string `json:"timeStamp"`
+	NonceStr  string `json:"nonceStr"`
+	Package   string `json:"package"`
+	SignType  string `json:"signType"`
+	PaySign   string `json:"paySign"`
 }
 PayJS := Pay.GetJs()
 Response, err := PayJS.Create(Request.TotalFee, Request.Body, Request.OutTradeNo, Request.Attach, Request.Openid)
@@ -369,6 +379,42 @@ openid, err := PayUser.GetUserOpenID(request)
 ```
 官方文档：[用户-获取openid
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
+
+#### 获取用户资料（PayJS官方即将废弃此接口）（签名验证有bug，暂取消验证报错）
+
+```go
+type Request struct {
+	Openid string `json:"openid"` //Y	openid
+}
+type Response struct {
+	ReturnCode int      `json:"return_code"` //Y	1:请求成功 0:请求失败
+	ReturnMsg  string   `json:"return_msg"`  //Y	返回消息
+	User       UserInfo `json:"user"`        //N	用户资料
+	Sign       string   `json:"sign"`        //Y	数据签名 详见签名算法
+}
+// UserInfo 用户参数说明(同微信官方文档)
+type UserInfo struct {
+	Subscribe      int    `json:"subscribe"`       //	用户是否订阅 PAYJS 公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息，只有openid和UnionID
+	Openid         string `json:"openid"`          //	用户的标识，对公众号唯一
+	Nickname       string `json:"nickname"`        //用户的昵称
+	Sex            int    `json:"sex"`             //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+	City           string `json:"city"`            //	用户所在城市
+	Country        string `json:"country"`         //用户所在国家
+	Province       string `json:"province"`        //用户所在省份
+	Language       string `json:"language"`        //用户的语言，简体中文为zh_CN
+	Headimgurl     string `json:"headimgurl"`      //用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。
+	SubscribeTime  int    `json:"subscribe_time"`  //用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间
+	Remark         string `json:"remark"`          //公众号运营者对粉丝的备注，公众号运营者可在微信公众平台用户管理界面对粉丝添加备注
+	Groupid        int    `json:"groupid"`         //用户所在的分组ID
+	TagidList      []int  `json:"tagid_list"`      //用户被打上的标签ID列表
+	SubscribeScene string `json:"subscribe_scene"` //返回用户关注的渠道来源，ADD_SCENE_SEARCH 公众号搜索，ADD_SCENE_ACCOUNT_MIGRATION 公众号迁移，ADD_SCENE_PROFILE_CARD 名片分享，ADD_SCENE_QR_CODE 扫描二维码，ADD_SCENE_PROFILE_LINK 图文页内名称点击，ADD_SCENE_PROFILE_ITEM 图文页右上角菜单，ADD_SCENE_PAID 支付后关注，ADD_SCENE_OTHERS 其他
+	QrScene        int    `json:"qr_scene"`        //二维码扫码场景
+	QrSceneStr     string `json:"qr_scene_str"`    //二维码扫码场景描述
+}
+Response, err := PayUser.GetUserInfo(Request.Openid)
+```
+官方文档：[用户-获取用户资料
+](https://help.payjs.cn/api-lie-biao/yong-hu-zi-liao.html)
 
 ## 商户资料（签名验证有bug，暂取消验证报错）
 
