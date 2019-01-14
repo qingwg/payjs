@@ -67,7 +67,7 @@ func (native *Native) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq 
 		return
 	}
 	if createResponse.ReturnCode != 1 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%v , errmsg=%s", createResponse.ReturnCode, createResponse.Msg)
+		err = fmt.Errorf("NativeCreate Error , errcode=%v , errmsg=%s, errmsg=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg)
 		return
 	}
 	// 检测sign

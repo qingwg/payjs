@@ -7,15 +7,15 @@ import (
 	"github.com/qingwg/payjs/util"
 )
 
-const getFacepayURL = "https://payjs.cn/api/facepay"
+const getCreateURL = "https://payjs.cn/api/facepay"
 
 // Facepay struct
 type Facepay struct {
 	*context.Context
 }
 
-// FacepayRequest 请求参数
-type FacepayRequest struct {
+// CreateRequest 请求参数
+type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
 	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
@@ -26,8 +26,8 @@ type FacepayRequest struct {
 	Sign       string `json:"sign"`         //Y	数据签名 详见签名算法
 }
 
-// FacepayResponse PayJS返回参数
-type FacepayResponse struct {
+// CreateResponse PayJS返回参数
+type CreateResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
@@ -45,8 +45,8 @@ func NewFacepay(context *context.Context) *Facepay {
 }
 
 // Create
-func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openidReq, faceCode string) (facepayResponse FacepayResponse, err error) {
-	facepayRequest := FacepayRequest{
+func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openidReq, faceCode string) (createResponse CreateResponse, err error) {
+	facepayRequest := CreateRequest{
 		MchID:      facepay.MchID,
 		TotalFee:   totalFeeReq,
 		OutTradeNo: outTradeNoReq,
@@ -57,21 +57,21 @@ func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachRe
 	}
 	sign := util.Signature(facepayRequest, facepay.Key)
 	facepayRequest.Sign = sign
-	response, err := util.PostJSON(getFacepayURL, facepayRequest)
+	response, err := util.PostJSON(getCreateURL, facepayRequest)
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(response, &facepayResponse)
+	err = json.Unmarshal(response, &createResponse)
 	if err != nil {
 		return
 	}
-	if facepayResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetPayQrcode Error , errcode=%d , errmsg=%s", facepayResponse.ReturnCode, facepayResponse.Msg)
+	if createResponse.ReturnCode == 0 {
+		err = fmt.Errorf("FacepayCreate Error , errcode=%d , errmsg=%s, errmsg=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
-	msgSignature := facepayResponse.Sign
-	msgSignatureGen := util.Signature(facepayResponse, facepay.Key)
+	msgSignature := createResponse.Sign
+	msgSignatureGen := util.Signature(createResponse, facepay.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return

@@ -46,7 +46,7 @@ func (order *Order) Check(payJSOrderID string) (checkResponse CheckResponse, err
 		return
 	}
 	if checkResponse.ReturnCode == 0 {
-		err = fmt.Errorf("OrderCheck Error , errcode=%d , errmsg=%s", checkResponse.ReturnCode)
+		err = fmt.Errorf("OrderCheck Error , errcode=%d", checkResponse.ReturnCode)
 		return
 	}
 	// 检测sign

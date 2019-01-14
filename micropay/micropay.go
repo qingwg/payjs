@@ -7,15 +7,15 @@ import (
 	"github.com/qingwg/payjs/util"
 )
 
-const getMicropayURL = "https://payjs.cn/api/cashier"
+const getCreateURL = "https://payjs.cn/api/micropay"
 
 // Micropay struct
 type Micropay struct {
 	*context.Context
 }
 
-// MicropayRequest 请求参数
-type MicropayRequest struct {
+// CreateRequest 请求参数
+type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
 	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
@@ -25,8 +25,8 @@ type MicropayRequest struct {
 	Sign       string `json:"sign"`         //Y	数据签名 详见签名算法
 }
 
-// MicropayResponse PayJS返回参数
-type MicropayResponse struct {
+// CreateResponse PayJS返回参数
+type CreateResponse struct {
 	ReturnCode   int    `json:"return_code"`    //Y	1:请求成功，0:请求失败
 	Msg          string `json:"msg"`            //N	return_code为0时返回的错误消息
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
@@ -43,9 +43,9 @@ func NewMicropay(context *context.Context) *Micropay {
 	return micropay
 }
 
-// GetMicropay 拿到扫码信息请求PayJS
-func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (outTradeNoResp string, totalFeeResp int, payJSOrderIDResp string, err error) {
-	micropayRequest := MicropayRequest{
+// Create 拿到扫码信息请求PayJS
+func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (createResponse CreateResponse, err error) {
+	createRequest := CreateRequest{
 		MchID:      micropay.MchID,
 		TotalFee:   totalFeeReq,
 		OutTradeNo: outTradeNoReq,
@@ -53,24 +53,26 @@ func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attach
 		Attach:     attachReq,
 		AuthCode:   autoCodeReq,
 	}
-	sign := util.Signature(micropayRequest, micropay.Context.Key)
-	micropayRequest.Sign = sign
-	response, err := util.PostJSON(getMicropayURL, micropayRequest)
+	sign := util.Signature(createRequest, micropay.Key)
+	createRequest.Sign = sign
+	response, err := util.PostJSON(getCreateURL, createRequest)
 	if err != nil {
 		return
 	}
-	micropayResponse := MicropayResponse{}
-	err = json.Unmarshal(response, &micropayResponse)
+
+	err = json.Unmarshal(response, &createResponse)
 	if err != nil {
 		return
 	}
-	if micropayResponse.ReturnCode == 0 {
-		err = fmt.Errorf("GetMicropay Error , errcode=%d , errmsg=%s", micropayResponse.ReturnCode, micropayResponse.Msg)
+
+	if createResponse.ReturnCode == 0 {
+		err = fmt.Errorf("MicropayCreate Error , errcode=%d , errmsg=%s, errmsg=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg)
 		return
 	}
+
 	// 检测sign
-	msgSignature := micropayResponse.Sign
-	msgSignatureGen := util.Signature(micropayResponse, micropay.Context.Key)
+	msgSignature := createResponse.Sign
+	msgSignatureGen := util.Signature(createResponse, micropay.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return
