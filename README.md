@@ -14,14 +14,12 @@
 - 商户资料签名验证失败BUG（为了正常使用，暂取消验证报错）
 - JSAPI支付签名验证失败BUG（为了正常使用，暂取消验证报错）
 - 获取用户资料验证失败BUG（为了正常使用，暂取消验证报错）
-- 付款码支付测试及演示（没有硬件设备暂无法完成）
 - JSAPI支付演示（没有设置JSAPI支付目录暂无法完成）
 - 小程序支付演示（没有申请小程序暂无法完成）
 - 人脸支付测试及演示（没有硬件设备暂无法完成）
 - 订单-撤销测试及演示（没有硬件设备暂无法完成）
 - 银行编码查询测试及演示
 - 演示程序还有一些细节需要完成
-- 异步通知演示
 
 ## 基本配置及初始化
 下面的是伪代码，请自行理解
@@ -84,7 +82,7 @@ Response, err := PayNative.Create(Request.TotalFee, Request.Body, Request.OutTra
 官方文档：[扫码支付
 ](https://help.payjs.cn/api-lie-biao/sao-ma-zhi-fu.html)
 
-## 付款码支付（未测试）
+## 付款码支付
 
 下面的是伪代码，请自行理解
 ```go
@@ -107,6 +105,7 @@ type Response struct {
 PayMicropay := Pay.GetMicropay()
 Response, err := PayMicropay.Create(Request.TotalFee, Request.Body, Request.OutTradeNo, Request.Attach, Request.AuthCode)
 ```
+被扫支付发起后，如果在免密范围，则直接返回支付状态。如果需要等待输入密码，则需要在30秒内通过订单check接口检查订单状态，30秒后则超时，订单不能被支付，订单状态变为 未支付 状态
 
 官方文档：[付款码支付
 ](https://help.payjs.cn/api-lie-biao/shua-qia-zhi-fu.html)
