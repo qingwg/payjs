@@ -59,7 +59,6 @@ func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attach
 	if err != nil {
 		return
 	}
-	fmt.Println("====response", string(response))
 
 	err = json.Unmarshal(response, &createResponse)
 	if err != nil {
