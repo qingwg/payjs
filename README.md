@@ -105,7 +105,8 @@ type Response struct {
 PayMicropay := Pay.GetMicropay()
 Response, err := PayMicropay.Create(Request.TotalFee, Request.Body, Request.OutTradeNo, Request.Attach, Request.AuthCode)
 ```
-被扫支付发起后，如果在免密范围，则直接返回支付状态。如果需要等待输入密码，则需要在30秒内通过订单check接口检查订单状态，30秒后则超时，订单不能被支付，订单状态变为 未支付 状态
+这里需要注意。在需要等待用户输入密码的情况下，该接口PayJS返回的ReturnCode也是0，但PayJSOrderID会返回。
+需要自行拿返回中的PayJSOrderID通过订单check接口检查订单状态，30秒后则超时，订单不能被支付，订单状态变为 未支付 状态
 
 官方文档：[付款码支付
 ](https://help.payjs.cn/api-lie-biao/shua-qia-zhi-fu.html)
