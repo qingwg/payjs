@@ -26,8 +26,8 @@ type CashierRequest struct {
 	Attach      string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
 	NotifyUrl   string `json:"notify_url"`   //N	接收微信支付异步通知的回调地址。必须为可直接访问的URL，不能带参数、session验证、csrf验证。留空则不通知
 	CallbackUrl string `json:"callback_url"` //N	用户支付成功后，前端跳转地址。留空则支付后关闭webview
-	Auto        bool   `json:"auto"`         //N	auto=1：无需点击支付按钮，自动发起支付。默认手动点击发起支付
-	Hide        bool   `json:"hide"`         //N	hide=1：隐藏收银台背景界面。默认显示背景界面（这里hide为1时，自动忽略auto参数）
+	Auto        int    `json:"auto"`         //N	auto=1：无需点击支付按钮，自动发起支付。默认手动点击发起支付
+	Hide        int    `json:"hide"`         //N	hide=1：隐藏收银台背景界面。默认显示背景界面（这里hide为1时，自动忽略auto参数）
 	Sign        string `json:"sign"`         //Y	数据签名 详见签名算法
 }
 
@@ -46,7 +46,7 @@ func NewCashier(context *context.Context) *Cashier {
 	return cashier
 }
 
-func (cashier *Cashier) GetRequestUrl(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, callbackUrlReq string, auto, hide bool) (src string, err error) {
+func (cashier *Cashier) GetRequestUrl(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, callbackUrlReq string, auto, hide int) (src string, err error) {
 	cashierRequest := CashierRequest{
 		MchID:       cashier.MchID,
 		TotalFee:    totalFeeReq,

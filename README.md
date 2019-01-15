@@ -121,8 +121,8 @@ type Request struct {
     Attach       string `json:"attach"`          //N	用户自定义数据，在notify的时候会原样返回
     OutTradeNo   string `json:"out_trade_no"`    //Y	用户端自主生成的订单号
     CallbackUrl  string `json:"callback_url"`    //N	用户支付成功后，前端跳转地址。留空则支付后关闭webview
-    Auto         bool   `json:"auto"`            //N	auto=1：无需点击支付按钮，自动发起支付。默认手动点击发起支付
-    Hide         bool   `json:"hide"`            //N	hide=1：隐藏收银台背景界面。默认显示背景界面（这里hide为1时，自动忽略auto参数）
+    Auto         int    `json:"auto"`            //N	auto=1：无需点击支付按钮，自动发起支付。默认手动点击发起支付（这里官方文档虽然是bool类型，但是如果传true是没用的，必须传1，所以我这里改成了int类型）
+    Hide         int    `json:"hide"`            //N	hide=1：隐藏收银台背景界面。默认显示背景界面（这里hide为1时，自动忽略auto参数）（这里官方文档虽然是bool类型，但是如果传true是没用的，必须传1，所以我这里改成了int类型）
 }
 PayCashier := Pay.GetCashier()
 requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Request.OutTradeNo, Request.Attach, Request.CallbackUrl, Request.Auto, Request.Hide)
