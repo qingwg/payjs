@@ -26,6 +26,7 @@ type CheckResponse struct {
 	Openid        string `json:"openid"`         //N	用户 OPENID
 	TotalFee      int    `json:"total_fee"`      //N	订单金额
 	PaidTime      string `json:"paid_time"`      //N	订单支付时间
+	TimeEnd       string `json:"time_end"`       //N	订单支付时间（这个参数奇怪，只有付款码支付查询的订单才有）
 	Attach        string `json:"attach"`         //N	用户自定义数据
 	Sign          string `json:"sign"`           //Y	数据签名 详见签名算法
 }

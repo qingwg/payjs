@@ -33,6 +33,7 @@ type CreateResponse struct {
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
 	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
 	TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
+	Status       int    `json:"status"`         //Y	0：未支付，1：支付成功（以后会取消）
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
 
