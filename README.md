@@ -73,6 +73,7 @@ type Response struct {
     TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
     Qrcode       string `json:"qrcode"`         //Y	二维码图片地址
     CodeUrl      string `json:"code_url"`       //Y	可将该参数生成二维码展示出来进行扫码支付
+    Status       int    `json:"status"`         //Y	0：未支付，1：支付成功（以后会取消）
     Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
 PayNative := Pay.GetNative()
@@ -252,7 +253,7 @@ type Response struct {
     Openid        string `json:"openid"`         //N	用户 OPENID
     TotalFee      int    `json:"total_fee"`      //N	订单金额
     PaidTime      string `json:"paid_time"`      //N	订单支付时间
-    TimeEnd       string `json:"time_end"`       //N	订单支付时间（这个参数奇怪，只有付款码支付查询的订单才有）
+    TimeEnd       string `json:"time_end"`       //N	订单支付时间（这个参数奇怪，只有付款码支付查询的订单才有，正在联系官方处理）
     Attach        string `json:"attach"`         //N	用户自定义数据
     Sign          string `json:"sign"`           //Y	数据签名 详见签名算法
 }
