@@ -66,7 +66,7 @@ func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attach
 	}
 
 	if createResponse.ReturnCode == 0 {
-		err = fmt.Errorf("MicropayCreate Error , errcode=%d , errmsg=%s, errmsg=%s, out_trade_no=%s, payjs_order_id=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg, createResponse.OutTradeNo, createResponse.PayJSOrderID)
+		err = fmt.Errorf("MicropayCreate Error , errcode=%d , errmsg=%s, errmsg=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg)
 		return
 	}
 

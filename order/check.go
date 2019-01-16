@@ -17,6 +17,7 @@ type CheckRequest struct {
 // CheckResponse PayJS返回参数
 type CheckResponse struct {
 	ReturnCode    int    `json:"return_code"`    //Y	1:请求成功 0:请求失败
+	ReturnMsg     string `json:"return_msg"`     //Y	返回消息
 	MchID         string `json:"mchid"`          //Y	PAYJS 平台商户号
 	OutTradeNo    string `json:"out_trade_no"`   //Y	用户端订单号
 	PayJSOrderID  string `json:"payjs_order_id"` //Y	PAYJS 订单号
@@ -46,7 +47,7 @@ func (order *Order) Check(payJSOrderID string) (checkResponse CheckResponse, err
 		return
 	}
 	if checkResponse.ReturnCode == 0 {
-		err = fmt.Errorf("OrderCheck Error , errcode=%d", checkResponse.ReturnCode)
+		err = fmt.Errorf("OrderCheck Error , errcode=%d, errmsg=%s", checkResponse.ReturnCode, checkResponse.ReturnMsg)
 		return
 	}
 	// 检测sign

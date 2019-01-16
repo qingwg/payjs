@@ -23,7 +23,6 @@ func Signature(message interface{}, privKey string) (sign string) {
 		//	params.Add(k, fmt.Sprintf("%v", v))
 		//}
 	}
-	//fmt.Println("======params", params)
 	params.Del(`sign`)
 
 	var keys = make([]string, 0, 0)
