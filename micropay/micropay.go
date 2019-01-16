@@ -59,7 +59,6 @@ func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attach
 	if err != nil {
 		return
 	}
-	fmt.Println("====response", string(response))
 
 	err = json.Unmarshal(response, &createResponse)
 	if err != nil {
@@ -67,7 +66,7 @@ func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attach
 	}
 
 	if createResponse.ReturnCode == 0 {
-		err = fmt.Errorf("MicropayCreate Error , errcode=%d , errmsg=%s, errmsg=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg)
+		err = fmt.Errorf("MicropayCreate Error , errcode=%d , errmsg=%s, errmsg=%s, out_trade_no=%s, payjs_order_id=%s", createResponse.ReturnCode, createResponse.Msg, createResponse.ReturnMsg, createResponse.OutTradeNo, createResponse.PayJSOrderID)
 		return
 	}
 
