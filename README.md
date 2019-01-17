@@ -11,13 +11,12 @@
 
 ## TODO
 
-- 商户资料签名验证失败BUG（为了正常使用，暂取消验证报错）
 - JSAPI支付签名验证失败BUG（为了正常使用，暂取消验证报错）
 - 获取用户资料验证失败BUG（为了正常使用，暂取消验证报错）
 - JSAPI支付演示（没有设置JSAPI支付目录暂无法完成）
 - 小程序支付演示（没有申请小程序暂无法完成）
 - 人脸支付测试及演示（没有硬件设备暂无法完成）
-- 演示程序还有一些细节需要完成（完成25%）
+- 演示程序还有一些细节需要完成（完成30%）
 
 ## 基本配置及初始化
 下面的是伪代码，请自行理解
@@ -419,7 +418,7 @@ Response, err := PayUser.GetUserInfo(Request.Openid)
 官方文档：[用户-获取用户资料
 ](https://help.payjs.cn/api-lie-biao/yong-hu-zi-liao.html)
 
-## 商户资料（签名验证有bug，暂取消验证报错）
+## 商户资料
 
 下面的是伪代码，请自行理解
 ```go
@@ -432,6 +431,7 @@ type Response struct {
     IDcardNo   string `json:"idcardno"`    //Y	身份证号
     JsApiPath  string `json:"jsapi_path"`  //Y	JSAPI 支付目录
     Phone      string `json:"phone"`       //Y	客服电话
+    MchID      string `json:"mchid"`       //Y	商户号
     Sign       string `json:"sign"`        //Y	数据签名 详见签名算法
 }
 PayMch := Pay.GetMch()

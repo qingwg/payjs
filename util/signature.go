@@ -42,7 +42,6 @@ func Signature(message interface{}, privKey string) (sign string) {
 	}
 	var src = strings.Join(pList, "&")
 	src += "&key=" + privKey
-	//fmt.Println("=====src", src)
 
 	sign = MD5Sum(src)
 
