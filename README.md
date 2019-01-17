@@ -19,7 +19,7 @@
 - 人脸支付测试及演示（没有硬件设备暂无法完成）
 - 订单-撤销测试及演示（没有硬件设备暂无法完成）
 - 银行编码查询测试及演示
-- 演示程序还有一些细节需要完成
+- 演示程序还有一些细节需要完成（完成20%）
 
 ## 基本配置及初始化
 下面的是伪代码，请自行理解
@@ -252,8 +252,7 @@ type Response struct {
     Status        int    `json:"status"`         //Y	0：未支付，1：支付成功
     Openid        string `json:"openid"`         //N	用户 OPENID
     TotalFee      int    `json:"total_fee"`      //N	订单金额
-    PaidTime      string `json:"paid_time"`      //N	订单支付时间
-    TimeEnd       string `json:"time_end"`       //N	订单支付时间（这个参数奇怪，只有付款码支付查询的订单才有，正在联系官方处理）
+    PaidTime      string `json:"paid_time"`      //N	订单支付时间)
     Attach        string `json:"attach"`         //N	用户自定义数据
     Sign          string `json:"sign"`           //Y	数据签名 详见签名算法
 }
