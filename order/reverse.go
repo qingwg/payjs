@@ -27,23 +27,24 @@ func (order *Order) Reverse(payJSOrderID string) (reverseResponse ReverseRespons
 	reverseRequest := ReverseRequest{
 		PayJSOrderID: payJSOrderID,
 	}
-	sign := util.Signature(reverseRequest, order.Context.Key)
+	sign := util.Signature(reverseRequest, order.Key)
 	reverseRequest.Sign = sign
 	response, err := util.PostJSON(getReverseURL, reverseRequest)
 	if err != nil {
 		return
 	}
+
 	err = json.Unmarshal(response, &reverseResponse)
 	if err != nil {
 		return
 	}
 	if reverseResponse.ReturnCode == 0 {
-		err = fmt.Errorf("Reverse  Error , errcode=%d , errmsg=%s", reverseResponse.ReturnCode, reverseResponse.ReturnMsg)
+		err = fmt.Errorf("OrderReverse  Error , errcode=%d , errmsg=%s", reverseResponse.ReturnCode, reverseResponse.ReturnMsg)
 		return
 	}
 	// 检测sign
 	msgSignature := reverseResponse.Sign
-	msgSignatureGen := util.Signature(reverseResponse, order.Context.Key)
+	msgSignatureGen := util.Signature(reverseResponse, order.Key)
 	if msgSignature != msgSignatureGen {
 		err = fmt.Errorf("消息不合法，验证签名失败")
 		return

@@ -280,6 +280,10 @@ Response, err := Response, err := PayOrder.Close(Request.PayJSOrderID)
 
 #### 撤销（未测试）
 
+该接口一般用户“付款码支付”和“人脸支付”两种支付场景，其它场景可使用“关闭订单”接口
+
+撤销订单主要是针对一些异常订单，例如无法查询或确定订单状态
+
 ```go
 type Request struct {
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
