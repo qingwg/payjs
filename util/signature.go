@@ -24,6 +24,7 @@ func Signature(message interface{}, privKey string) (sign string) {
 		//}
 	}
 	params.Del(`sign`)
+	//fmt.Println("=====params", params)
 
 	var keys = make([]string, 0, 0)
 	for key := range params {
@@ -32,6 +33,7 @@ func Signature(message interface{}, privKey string) (sign string) {
 		}
 	}
 	sort.Strings(keys)
+	//fmt.Println("=====keys", keys)
 
 	var pList = make([]string, 0, 0)
 	for _, key := range keys {
@@ -42,6 +44,7 @@ func Signature(message interface{}, privKey string) (sign string) {
 	}
 	var src = strings.Join(pList, "&")
 	src += "&key=" + privKey
+	//fmt.Println("=====src", src)
 
 	sign = MD5Sum(src)
 

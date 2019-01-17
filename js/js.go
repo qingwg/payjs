@@ -69,6 +69,7 @@ func (js *Js) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openid 
 	if err != nil {
 		return
 	}
+	//fmt.Println("=====response", string(response))
 
 	err = json.Unmarshal(response, &jsApiResponse)
 	if err != nil {
@@ -78,12 +79,12 @@ func (js *Js) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openid 
 		err = fmt.Errorf("GetJsApi Error , errcode=%d , errmsg=%s", jsApiResponse.ReturnCode, jsApiResponse.ReturnMsg)
 		return
 	}
-	//// 检测sign
-	//msgSignature := jsApiResponse.Sign
-	//msgSignatureGen := util.Signature(jsApiResponse, js.Key)
-	//if msgSignature != msgSignatureGen {
-	//	err = fmt.Errorf("消息不合法，验证签名失败")
-	//	return
-	//}
+	// 检测sign
+	msgSignature := jsApiResponse.Sign
+	msgSignatureGen := util.Signature(jsApiResponse, js.Key)
+	if msgSignature != msgSignatureGen {
+		err = fmt.Errorf("消息不合法，验证签名失败")
+		return
+	}
 	return
 }
