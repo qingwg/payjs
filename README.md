@@ -135,7 +135,7 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 ](https://help.payjs.cn/api-lie-biao/shou-yin-tai-zhi-fu.html)
 
 ## JSAPI支付
-**签名验证有bug，暂取消验证报错**
+**注意：签名验证有bug，暂取消验证报错**
 
 下面的是伪代码，请自行理解
 ```go
@@ -203,7 +203,7 @@ Response, err := PayMiniApp.GetOrderInfo(Request.TotalFee, Request.Body, Request
 ](https://help.payjs.cn/api-lie-biao/xiao-cheng-xu-zhi-fu.html)
 
 ## 人脸支付
-**未测试**
+**注意：未测试**
 
 下面的是伪代码，请自行理解
 ```go
@@ -388,9 +388,9 @@ openid, err := PayUser.GetUserOpenID(request)
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
 #### 获取用户资料
-**PayJS官方即将废弃此接口**
+**注意：PayJS官方即将废弃此接口**
 
-**签名验证有bug，暂取消验证报错**
+**注意：签名验证有bug，暂取消验证报错**
 
 ```go
 type Request struct {
@@ -470,7 +470,7 @@ Response, err := PayBank.GetBankInfo(Request.Bank)
 ](https://help.payjs.cn/api-lie-biao/yin-xing-bian-ma-cha-xun.html)
 
 ## 获取异步通知服务器IP列表
-**签名验证有bug，暂取消验证报错**
+**注意：签名验证有bug，暂取消验证报错**
 
 下面的是伪代码，请自行理解
 ```go
