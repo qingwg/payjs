@@ -9,7 +9,7 @@
 
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
-求助：此接口签名验证算法与微信相同。但是如果碰到[]string等，或多维结构体，例如JSAPI支付接口的Response，则无法正确签名验证。该如何处理呢？
+求助：此SDK签名验证算法与微信相同。但是如果碰到[]string等，或多维结构体，例如JSAPI支付接口的Response，则无法正确签名验证。该如何处理呢？
 
 ## TODO
 
@@ -134,7 +134,8 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 官方文档：[收银台支付
 ](https://help.payjs.cn/api-lie-biao/shou-yin-tai-zhi-fu.html)
 
-## JSAPI支付（签名验证有bug，暂取消验证报错）
+## JSAPI支付
+**签名验证有bug，暂取消验证报错**
 
 下面的是伪代码，请自行理解
 ```go
@@ -169,7 +170,6 @@ Response, err := PayJS.Create(Request.TotalFee, Request.Body, Request.OutTradeNo
 ](https://help.payjs.cn/api-lie-biao/jsapiyuan-sheng-zhi-fu.html)
 
 ## 小程序支付
-
 下面的是伪代码，请自行理解
 
 小程序发起支付的解决方案有两种，仅供测试使用
@@ -202,7 +202,8 @@ Response, err := PayMiniApp.GetOrderInfo(Request.TotalFee, Request.Body, Request
 官方文档：[小程序支付
 ](https://help.payjs.cn/api-lie-biao/xiao-cheng-xu-zhi-fu.html)
 
-## 人脸支付（未测试）
+## 人脸支付
+**未测试**
 
 下面的是伪代码，请自行理解
 ```go
@@ -386,7 +387,10 @@ openid, err := PayUser.GetUserOpenID(request)
 官方文档：[用户-获取openid
 ](https://help.payjs.cn/api-lie-biao/huo-qu-openid.html)
 
-#### 获取用户资料（PayJS官方即将废弃此接口）（签名验证有bug，暂取消验证报错）
+#### 获取用户资料
+**PayJS官方即将废弃此接口**
+
+**签名验证有bug，暂取消验证报错**
 
 ```go
 type Request struct {
@@ -465,7 +469,8 @@ Response, err := PayBank.GetBankInfo(Request.Bank)
 官方文档：[银行编码查询
 ](https://help.payjs.cn/api-lie-biao/yin-xing-bian-ma-cha-xun.html)
 
-## 获取异步通知服务器IP列表（签名验证有bug，暂取消验证报错）
+## 获取异步通知服务器IP列表
+**签名验证有bug，暂取消验证报错**
 
 下面的是伪代码，请自行理解
 ```go
