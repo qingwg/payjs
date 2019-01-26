@@ -111,7 +111,7 @@ func (notify *Notify) getMessage() (message Message, err error) {
 
 	//验证消息签名
 	msgSignature := message.Sign
-	msgSignatureGen := util.Signature(message, notify.Context.Key)
+	msgSignatureGen := util.Signature(message, notify.Key)
 	if msgSignature != msgSignatureGen {
 		return message, fmt.Errorf("消息不合法，验证签名失败")
 	}
