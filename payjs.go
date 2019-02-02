@@ -5,6 +5,7 @@ import (
 	"github.com/qingwg/payjs/cashier"
 	"github.com/qingwg/payjs/context"
 	"github.com/qingwg/payjs/facepay"
+	"github.com/qingwg/payjs/ip"
 	"github.com/qingwg/payjs/js"
 	"github.com/qingwg/payjs/mch"
 	"github.com/qingwg/payjs/micropay"
@@ -93,4 +94,9 @@ func (payjs *PayJS) GetMch() *mch.Mch {
 // GetBank 银行编码查询
 func (payjs *PayJS) GetBank() *bank.Bank {
 	return bank.NewBank(payjs.Context)
+}
+
+// GetIP IP
+func (payjs *PayJS) GetIP() *ip.IP {
+	return ip.NewIP(payjs.Context)
 }

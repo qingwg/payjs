@@ -60,7 +60,7 @@ func NewUser(context *context.Context) *User {
 
 // GetUserOpenIDUrl 获取请求url
 func (user *User) GetUserOpenIDUrl(callbackUrlReq string) (src string, err error) {
-	return getUserOpenIDURL + "?callback_url=" + callbackUrlReq, nil
+	return getUserOpenIDURL + "?mchid=" + user.MchID + "&callback_url=" + callbackUrlReq, nil
 }
 
 // GetUserOpenID 获取用户 OPENID
