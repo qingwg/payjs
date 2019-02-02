@@ -60,7 +60,7 @@ Pay = payjs.New(payjsConfig)
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
-    TotalFee     int    `json:"total_fee"`       //Y	金额。单位：分
+    TotalFee     int64  `json:"total_fee"`       //Y	金额。单位：分
     Body         string `json:"body"`            //N	订单标题
     Attach       string `json:"attach"`          //N	用户自定义数据，在notify的时候会原样返回
     OutTradeNo   string `json:"out_trade_no"`    //Y	用户端自主生成的订单号
@@ -71,7 +71,7 @@ type Response struct {
     ReturnMsg    string `json:"return_msg"`     //Y	返回消息
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
     OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-    TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
+    TotalFee     int64  `json:"total_fee"`      //Y	金额。单位：分
     Qrcode       string `json:"qrcode"`         //Y	二维码图片地址
     CodeUrl      string `json:"code_url"`       //Y	可将该参数生成二维码展示出来进行扫码支付
     Status       int    `json:"status"`         //Y	0：未支付，1：支付成功（官方表示此参数以后会取消）
@@ -89,7 +89,7 @@ Response, err := PayNative.Create(Request.TotalFee, Request.Body, Request.OutTra
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
-    TotalFee     int    `json:"total_fee"`       //Y	金额。单位：分
+    TotalFee     int64  `json:"total_fee"`       //Y	金额。单位：分
     Body         string `json:"body"`            //N	订单标题
     Attach       string `json:"attach"`          //N	用户自定义数据，在notify的时候会原样返回
     OutTradeNo   string `json:"out_trade_no"`    //Y	用户端自主生成的订单号
@@ -101,7 +101,7 @@ type Response struct {
     ReturnMsg    string `json:"return_msg"`     //Y	返回消息
     PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
     OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-    TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
+    TotalFee     int64  `json:"total_fee"`      //Y	金额。单位：分
     Status       int    `json:"status"`         //Y	0：未支付，1：支付成功（官方表示此参数以后会取消）
     Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
@@ -119,7 +119,7 @@ Response, err := PayMicropay.Create(Request.TotalFee, Request.Body, Request.OutT
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
-    TotalFee     int    `json:"total_fee"`       //Y	金额。单位：分
+    TotalFee     int64  `json:"total_fee"`       //Y	金额。单位：分
     Body         string `json:"body"`            //N	订单标题
     Attach       string `json:"attach"`          //N	用户自定义数据，在notify的时候会原样返回
     OutTradeNo   string `json:"out_trade_no"`    //Y	用户端自主生成的订单号
@@ -140,7 +140,7 @@ requestUrl, err := PayCashier.GetRequestUrl(Request.TotalFee, Request.Body, Requ
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
-    TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+    TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
     OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号，在用户端要保证唯一性
     Body       string `json:"body"`         //N	订单标题
     Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -178,7 +178,7 @@ Response, err := PayJS.Create(Request.TotalFee, Request.Body, Request.OutTradeNo
 - 方案二：使用小程序跳转到 PAYJS 小程序，支付后返回（下面代码是方案二）
 ```go
 type Request struct {
-    TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+    TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
     OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号，在用户端要保证唯一性
     Body       string `json:"body"`         //N	订单标题
     Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -186,7 +186,7 @@ type Request struct {
 }
 type Response struct {
     MchID      string `json:"mch_id"`       //Y 商户号
-    TotalFee   int    `json:"total_fee"`    //Y 金额。单位：分
+    TotalFee   int64  `json:"total_fee"`    //Y 金额。单位：分
     OutTradeNo string `json:"out_trade_no"` //Y 用户端自主生成的订单号
     Body       string `json:"body"`         //N 订单标题
     Attach     string `json:"attach"`       //N 用户自定义数据，在notify的时候会原样返回
@@ -208,7 +208,7 @@ Response, err := PayMiniApp.GetOrderInfo(Request.TotalFee, Request.Body, Request
 下面的是伪代码，请自行理解
 ```go
 type Request struct {
-    TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+    TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
     OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号，在用户端要保证唯一性
     Body       string `json:"body"`         //N	订单标题
     Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -253,7 +253,7 @@ type Response struct {
     TransactionID string `json:"transaction_id"` //N	微信显示订单号
     Status        int    `json:"status"`         //Y	0：未支付，1：支付成功
     Openid        string `json:"openid"`         //N	用户 OPENID
-    TotalFee      int    `json:"total_fee"`      //N	订单金额
+    TotalFee      int64  `json:"total_fee"`      //N	订单金额
     PaidTime      string `json:"paid_time"`      //N	订单支付时间)
     Attach        string `json:"attach"`         //N	用户自定义数据
     Sign          string `json:"sign"`           //Y	数据签名 详见签名算法
@@ -325,7 +325,7 @@ Response, err := PayOrder.Refund(Request.PayJSOrderID)
 // Message PayJS支付成功异步通知过来的内容
 type Message struct {
     ReturnCode    int    `json:"return_code"`    // 必填	1：支付成功
-    TotalFee      int    `json:"total_fee"`      // 必填	金额。单位：分
+    TotalFee      int64  `json:"total_fee"`      // 必填	金额。单位：分
     OutTradeNo    string `json:"out_trade_no"`   // 必填	用户端自主生成的订单号
     PayJSOrderID  string `json:"payjs_order_id"` // 必填	PAYJS 订单号
     TransactionID string `json:"transaction_id"` // 必填	微信用户手机显示订单号
@@ -433,7 +433,7 @@ Response, err := PayUser.GetUserInfo(Request.Openid)
 type Response struct {
     ReturnCode int    `json:"return_code"` //Y	1:请求成功 0:请求失败
     ReturnMsg  string `json:"return_msg"`  //Y	返回消息
-    Doudou     int    `json:"doudou"`      //Y	用户豆豆数
+    Doudou     int64  `json:"doudou"`      //Y	用户豆豆数
     Name       string `json:"name"`        //Y	商户名称
     Username   string `json:"username"`    //Y	用户姓名
     IDcardNo   string `json:"idcardno"`    //Y	身份证号
