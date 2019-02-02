@@ -24,7 +24,7 @@ type CheckResponse struct {
 	TransactionID string `json:"transaction_id"` //N	微信显示订单号
 	Status        int    `json:"status"`         //Y	0：未支付，1：支付成功
 	Openid        string `json:"openid"`         //N	用户 OPENID
-	TotalFee      int    `json:"total_fee"`      //N	订单金额
+	TotalFee      int64  `json:"total_fee"`      //N	订单金额
 	PaidTime      string `json:"paid_time"`      //N	订单支付时间
 	Attach        string `json:"attach"`         //N	用户自定义数据
 	Sign          string `json:"sign"`           //Y	数据签名 详见签名算法

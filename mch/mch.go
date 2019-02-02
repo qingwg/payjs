@@ -24,7 +24,7 @@ type MchInfoRequest struct {
 type MchInfoResponse struct {
 	ReturnCode int    `json:"return_code"` //Y	1:请求成功 0:请求失败
 	ReturnMsg  string `json:"return_msg"`  //Y	返回消息
-	Doudou     int    `json:"doudou"`      //Y	用户豆豆数
+	Doudou     int64  `json:"doudou"`      //Y	用户豆豆数
 	Name       string `json:"name"`        //Y	商户名称
 	Username   string `json:"username"`    //Y	用户姓名
 	IDcardNo   string `json:"idcardno"`    //Y	身份证号

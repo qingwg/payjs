@@ -26,7 +26,7 @@ type Notify struct {
 // Message PayJS支付成功异步通知过来的内容
 type Message struct {
 	ReturnCode    int    `json:"return_code"`    // 必填	1：支付成功
-	TotalFee      int    `json:"total_fee"`      // 必填	金额。单位：分
+	TotalFee      int64  `json:"total_fee"`      // 必填	金额。单位：分
 	OutTradeNo    string `json:"out_trade_no"`   // 必填	用户端自主生成的订单号
 	PayJSOrderID  string `json:"payjs_order_id"` // 必填	PAYJS 订单号
 	TransactionID string `json:"transaction_id"` // 必填	微信用户手机显示订单号
@@ -95,7 +95,7 @@ func (notify *Notify) handleRequest() (err error) {
 //getMessage 解析PayJS支付成功推送的消息
 func (notify *Notify) getMessage() (message Message, err error) {
 	message.ReturnCode, _ = strconv.Atoi(notify.ServerRequest.PostFormValue("return_code"))
-	message.TotalFee, _ = strconv.Atoi(notify.ServerRequest.PostFormValue("total_fee"))
+	message.TotalFee, _ = strconv.ParseInt(notify.ServerRequest.PostFormValue("total_fee"), 10, 64)
 	message.OutTradeNo = notify.ServerRequest.PostFormValue("out_trade_no")
 	message.PayJSOrderID = notify.ServerRequest.PostFormValue("payjs_order_id")
 	message.TransactionID = notify.ServerRequest.PostFormValue("transaction_id")
@@ -111,7 +111,7 @@ func (notify *Notify) getMessage() (message Message, err error) {
 
 	//验证消息签名
 	msgSignature := message.Sign
-	msgSignatureGen := util.Signature(message, notify.Context.Key)
+	msgSignatureGen := util.Signature(message, notify.Key)
 	if msgSignature != msgSignatureGen {
 		return message, fmt.Errorf("消息不合法，验证签名失败")
 	}

@@ -17,7 +17,7 @@ type Native struct {
 // CreateRequest 请求参数
 type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
-	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+	TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
 	Body       string `json:"body"`         //N	订单标题
 	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -32,7 +32,7 @@ type CreateResponse struct {
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
 	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-	TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
+	TotalFee     int64  `json:"total_fee"`      //Y	金额。单位：分
 	Qrcode       string `json:"qrcode"`         //Y	二维码图片地址
 	CodeUrl      string `json:"code_url"`       //Y	可将该参数生成二维码展示出来进行扫码支付
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
@@ -46,7 +46,7 @@ func NewNative(context *context.Context) *Native {
 }
 
 // Create 请求PayJS获取支付二维码
-func (native *Native) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq string) (createResponse CreateResponse, err error) {
+func (native *Native) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq string) (createResponse CreateResponse, err error) {
 	createRequest := CreateRequest{
 		MchID:      native.MchID,
 		TotalFee:   totalFeeReq,

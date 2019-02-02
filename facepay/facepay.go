@@ -17,7 +17,7 @@ type Facepay struct {
 // CreateRequest 请求参数
 type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
-	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+	TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
 	Body       string `json:"body"`         //N	订单标题
 	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -45,7 +45,7 @@ func NewFacepay(context *context.Context) *Facepay {
 }
 
 // Create
-func (facepay *Facepay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openidReq, faceCode string) (createResponse CreateResponse, err error) {
+func (facepay *Facepay) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq, openidReq, faceCode string) (createResponse CreateResponse, err error) {
 	facepayRequest := CreateRequest{
 		MchID:      facepay.MchID,
 		TotalFee:   totalFeeReq,

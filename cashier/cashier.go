@@ -20,7 +20,7 @@ type Cashier struct {
 // CashierRequest 请求参数
 type CashierRequest struct {
 	MchID       string `json:"mchid"`        //Y	商户号
-	TotalFee    int    `json:"total_fee"`    //Y	金额。单位：分
+	TotalFee    int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo  string `json:"out_trade_no"` //Y	用户端自主生成的订单号，在用户端要保证唯一性
 	Body        string `json:"body"`         //N	订单标题
 	Attach      string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -46,7 +46,7 @@ func NewCashier(context *context.Context) *Cashier {
 	return cashier
 }
 
-func (cashier *Cashier) GetRequestUrl(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, callbackUrlReq string, auto, hide int) (src string, err error) {
+func (cashier *Cashier) GetRequestUrl(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq, callbackUrlReq string, auto, hide int) (src string, err error) {
 	cashierRequest := CashierRequest{
 		MchID:       cashier.MchID,
 		TotalFee:    totalFeeReq,

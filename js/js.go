@@ -17,7 +17,7 @@ type Js struct {
 // JsApiRequest
 type JsApiRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
-	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+	TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号，在用户端要保证唯一性
 	Body       string `json:"body"`         //N	订单标题
 	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -53,7 +53,7 @@ func NewJs(context *context.Context) *Js {
 }
 
 // Create 获取发起支付所需要的参数
-func (js *Js) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, openid string) (jsApiResponse JsApiResponse, err error) {
+func (js *Js) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq, openid string) (jsApiResponse JsApiResponse, err error) {
 	jsApiRequest := JsApiRequest{
 		MchID:      js.MchID,
 		TotalFee:   totalFeeReq,

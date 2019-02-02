@@ -17,7 +17,7 @@ type Micropay struct {
 // CreateRequest 请求参数
 type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
-	TotalFee   int    `json:"total_fee"`    //Y	金额。单位：分
+	TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
 	Body       string `json:"body"`         //N	订单标题
 	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
@@ -32,7 +32,7 @@ type CreateResponse struct {
 	ReturnMsg    string `json:"return_msg"`     //Y	返回消息
 	PayJSOrderID string `json:"payjs_order_id"` //Y	PAYJS 平台订单号
 	OutTradeNo   string `json:"out_trade_no"`   //Y	用户生成的订单号原样返回
-	TotalFee     int    `json:"total_fee"`      //Y	金额。单位：分
+	TotalFee     int64  `json:"total_fee"`      //Y	金额。单位：分
 	Status       int    `json:"status"`         //Y	0：未支付，1：支付成功（以后会取消）
 	Sign         string `json:"sign"`           //Y	数据签名 详见签名算法
 }
@@ -45,7 +45,7 @@ func NewMicropay(context *context.Context) *Micropay {
 }
 
 // Create 拿到扫码信息请求PayJS
-func (micropay *Micropay) Create(totalFeeReq int, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (createResponse CreateResponse, err error) {
+func (micropay *Micropay) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq, autoCodeReq string) (createResponse CreateResponse, err error) {
 	createRequest := CreateRequest{
 		MchID:      micropay.MchID,
 		TotalFee:   totalFeeReq,
