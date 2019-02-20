@@ -3,7 +3,6 @@ package notify
 import (
 	"fmt"
 	"github.com/qingwg/payjs/context"
-	"github.com/qingwg/payjs/util"
 	"net/http"
 	"strconv"
 )
@@ -109,12 +108,13 @@ func (notify *Notify) getMessage() (message Message, err error) {
 	//	return message, fmt.Errorf("从body中解析json失败,err=%v", err)
 	//}
 
-	//验证消息签名
-	msgSignature := message.Sign
-	msgSignatureGen := util.Signature(message, notify.Key)
-	if msgSignature != msgSignatureGen {
-		return message, fmt.Errorf("消息不合法，验证签名失败")
-	}
+	//todo:解决多维结构造成签名验证失败bug
+	////验证消息签名
+	//msgSignature := message.Sign
+	//msgSignatureGen := util.Signature(message, notify.Key)
+	//if msgSignature != msgSignatureGen {
+	//	return message, fmt.Errorf("消息不合法，验证签名失败")
+	//}
 
 	if message.ReturnCode != 1 {
 		return message, fmt.Errorf("支付失败")

@@ -9,7 +9,8 @@
 
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
-求助：此SDK签名验证算法与微信相同。但是如果碰到[]string等，或多维结构体，例如JSAPI支付接口的Response，则无法正确签名验证。该如何处理呢？
+**求助：此SDK签名验证算法与微信相同。但是如果碰到[]string等，或多维结构体，例如JSAPI支付接口的Response，则无法正确签名验证。该如何处理呢？
+[issue链接](https://github.com/qingwg/payjs/issues/2#issue-412314332)**
 
 ## TODO
 
@@ -20,6 +21,12 @@
 - 小程序支付演示（没有申请小程序暂无法完成）
 - 人脸支付测试及演示（没有硬件设备暂无法完成）
 - 演示程序还有一些细节需要完成（完成50%）
+
+## 获取
+```go
+go get github.com/qingwg/payjs
+```
+
 
 ## 基本配置及初始化
 下面的是伪代码，请自行理解
