@@ -5,7 +5,7 @@
 
 使用Golang开发的PayJS SDK，简单、易用。
 
-[PayJS](https://payjs.cn/ref/DWPXBZ)是微信支付个人接口解决方案，感兴趣的可以去官网看下。
+[PayJS](https://payjs.cn/ref/DWPXBZ)是微信支付（支付宝正在内测中）个人接口解决方案，感兴趣的可以去官网看下。
 
 这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
 
@@ -21,6 +21,7 @@
 - 小程序支付演示（没有申请小程序暂无法完成）
 - 人脸支付测试及演示（没有硬件设备暂无法完成）
 - 演示程序还有一些细节需要完成（完成50%）
+- 支付宝支付（功能内测中，代码还没写）
 
 ## 获取
 ```go
