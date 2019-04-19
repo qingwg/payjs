@@ -47,11 +47,12 @@ func NewNative(context *context.Context) *Native {
 }
 
 // Create 请求PayJS获取支付二维码
-func (native *Native) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq string) (createResponse CreateResponse, err error) {
+func (native *Native) Create(totalFeeReq int64, bodyReq, outTradeNoReq, attachReq, payType string) (createResponse CreateResponse, err error) {
 	createRequest := CreateRequest{
 		MchID:      native.MchID,
 		TotalFee:   totalFeeReq,
 		OutTradeNo: outTradeNoReq,
+		Type:       payType,
 		Body:       bodyReq,
 		Attach:     attachReq,
 		NotifyUrl:  native.NotifyUrl,
