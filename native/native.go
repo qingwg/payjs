@@ -19,6 +19,7 @@ type CreateRequest struct {
 	MchID      string `json:"mchid"`        //Y	商户号
 	TotalFee   int64  `json:"total_fee"`    //Y	金额。单位：分
 	OutTradeNo string `json:"out_trade_no"` //Y	用户端自主生成的订单号
+	Type       string `json:"type"`         //N 留空表示微信支付。支付宝交易传值：alipay
 	Body       string `json:"body"`         //N	订单标题
 	Attach     string `json:"attach"`       //N	用户自定义数据，在notify的时候会原样返回
 	NotifyUrl  string `json:"notify_url"`   //N	接收微信支付异步通知的回调地址。必须为可直接访问的URL，不能带参数、session验证、csrf验证。留空则不通知
