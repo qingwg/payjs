@@ -125,6 +125,6 @@ func (notify *Notify) getMessage() (message Message, err error) {
 
 func (notify *Notify) SendResponseMsg() (err error) {
 	notify.ServerWriter.Header().Set("Content-Type", "application/json")
-	notify.ServerWriter.Write([]byte("ok"))
+	notify.ServerWriter.Write([]byte("success"))
 	return
 }
