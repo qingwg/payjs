@@ -7,7 +7,7 @@
 
 [PayJS](https://payjs.cn/ref/DWPXBZ)是支付宝与微信支付个人接口解决方案，感兴趣的可以去官网看下。
 
-这里是SDK的演示地址：[https://payjs.qingwuguo.com](https://payjs.qingwuguo.com)
+这里是SDK的演示地址：[~~https://payjs.qingwuguo.com~~](~~https://payjs.qingwuguo.com~~)（最近接到阿里通知要大检查，虽然没啥违规的东西，但是还有有点怕，所以先关闭演示地址，过些日子放出来）
 
 **求助：此SDK签名验证算法与微信相同。但是如果碰到[]string等，或多维结构体，例如JSAPI支付接口的Response，则无法正确签名验证。该如何处理呢？
 [issue链接](https://github.com/qingwg/payjs/issues/2#issue-412314332)**
